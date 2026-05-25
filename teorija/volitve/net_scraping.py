@@ -14,7 +14,7 @@ for i in range(1,9):
 
     vsebina = odgovor.text
 
-    with open(f"teorija\\volitve\\2000\\VO_{i}.html", "w", encoding="UTF-8") as dat:
+    with open(f"teorija\\volitve\\2000\\VE_{i}.html", "w", encoding="UTF-8") as dat:
         dat.write(vsebina)
 
     time.sleep(2)
@@ -25,7 +25,7 @@ for i in range(1,9):
     print(f"2004_{i}", odgovor.status_code)
     vsebina = odgovor.text
 
-    with open(f"teorija\\volitve\\2004\\VO_{i}.html", "w", encoding="UTF-8") as dat:
+    with open(f"teorija\\volitve\\2004\\VE_{i}.html", "w", encoding="UTF-8") as dat:
         dat.write(vsebina)
 
     time.sleep(2)
@@ -37,7 +37,7 @@ for i in range(1,9):
     print(f"2008_{i}", odgovor.status_code)
     vsebina = odgovor.text
 
-    with open(f"teorija\\volitve\\2008\\VO_{i}.html", "w", encoding="UTF-8") as dat:
+    with open(f"teorija\\volitve\\2008\\VE_{i}.html", "w", encoding="UTF-8") as dat:
         dat.write(vsebina)
 
     time.sleep(2)
@@ -48,7 +48,7 @@ for i in range(1,9):
     print(f"2011_{i}", odgovor.status_code)
     vsebina = odgovor.text
 
-    with open(f"teorija\\volitve\\2011\\VO_{i}.html", "w", encoding="UTF-8") as dat:
+    with open(f"teorija\\volitve\\2011\\VE_{i}.html", "w", encoding="UTF-8") as dat:
         dat.write(vsebina)
 
     time.sleep(2)
@@ -59,7 +59,7 @@ for i in range(1,9):
     print(f"2014_{i}", odgovor.status_code)
     vsebina = odgovor.text
 
-    with open(f"teorija\\volitve\\2014\\VO_{i}.html", "w", encoding="UTF-8") as dat:
+    with open(f"teorija\\volitve\\2014\\VE_{i}.html", "w", encoding="UTF-8") as dat:
         dat.write(vsebina)
 
     time.sleep(2)
