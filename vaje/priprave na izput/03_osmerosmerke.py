@@ -1,183 +1,123 @@
 # =============================================================================
-# Vgrajene metode
-# =====================================================================@027491=
+# Osmerosmerke
+#
+# Osmerosmerka je besedna igra, pri kateri v dani mreži črk iščemo zapisane besede.
+# Kot nakazuje že ime, besede iščemo v osmih smereh: vodoravno (levo ali desno),
+# navpično (gor ali dol) in diagonalno (levo gor, levo dol, desno gor, desno dol).
+# Reševalec mora poiskati besede v mreži in jih prečrtati. Nato iz neprečrtanih
+# črk sestavi geslo.
+#
+# Mrežo črk predstavimo s seznamom nizov enakih dolžin, pri čemer vsak niz
+# predstavlja eno vrstico v mreži.
+#
+# Če v mreži `['kru', 'nia', 'osa']` poiščemo in prečrtamo besedi `'osa'`
+# in `'ris'`, iz neprečrtanih črk dobimo geslo `'kuna'`.
+# =====================================================================@042957=
 # 1. podnaloga
-# Sestavite funkcijo `prezrcali`, ki vrne prezrcaljen niz.
-# 
-#     >>> prezrcali('abeceda')
-#     'adeceba'
-# =============================================================================
-def prezrcali(niz):
-    # if len(niz) < 2:
-    #     return niz
-    # else:
-    #     return niz1[-1] + prezrcali(niz[:-1])
-    return niz[::-1]
-# =====================================================================@027492=
-# 2. podnaloga
-# Sestavite funkcijo `je_palindrom`, ki preveri, če je niz palindrom.
-# 
-#     >>> je_palindrom('kajak')
+# Sestavi funkcijo `preveri_besedo(mreza, beseda, zacetek, smer)`, ki preveri,
+# ali se v mreži `mreza` nahaja beseda `beseda` z začetkom v polju `zacetek`,
+# ki je podano s parom koordinat (vrstica, stolpec), ter gledano v smeri `smer`,
+# ki je podana z enim od osmih smernih vektorjev (-1, -1), (-1, 0), (-1, 1),
+# (0, -1), (0, 1), (1, -1), (1, 0), (1, 1).
+#
+#     >>> mreza = ['atene',
+#                  'otrop',
+#                  'oeisl',
+#                  'blmoa']
+#     >>> preveri_besedo(mreza, 'bern', (3, 0), (-1, 1))
 #     True
+#     >>> preveri_besedo(mreza, 'plaz', (1, 4), (1, 0))
+#     False
 # =============================================================================
-def je_palindrom(niz):
-    return niz == prezrcali(niz)
-# =====================================================================@027483=
+def preveri_besedo(mreza, beseda, zacetek, smer):
+    u = zacetek[0]
+    v = zacetek[1]
+    x = smer[0]
+    y = smer[1]
+    korak = 0
+    i = True
+    for crka in beseda:
+        if u + korak * x not in range(len(mreza)) or v + korak * y not in range(
+            len(mreza[0])
+        ):
+            return False
+        if crka != mreza[u + korak * x][v + korak * y]:
+            i = False
+        korak += 1
+    return i
+
+
+# =====================================================================@042958=
+# 2. podnaloga
+# Sestavi funkcijo `poisci_besedo(mreza, beseda)`, ki v mreži `mreza` poišče
+# besedo `beseda`. Vrne naj polje, kjer se beseda prične, in smer, v katero
+# je beseda zapisana. Če iskane besede ne najde, naj vrne `None`.
+#
+#     >>> poisci_besedo(mreza, 'bern')
+#     ((3, 0), (-1, 1))
+#     >>> poisci_besedo(mreza, 'plaz')
+#     None
+# =============================================================================
+def poisci_besedo(mreza, beseda):
+    smeri = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)]
+    pojavitve = []
+    for vrstica, besedilo in enumerate(mreza):
+        for mesto, crka in enumerate(besedilo):
+            if crka == beseda[0]:
+                pojavitve.append((vrstica, mesto))
+    for pojavitev in pojavitve:
+        for smerni_vektor in smeri:
+            if preveri_besedo(mreza, beseda, pojavitev, smerni_vektor):
+                return (pojavitev, smerni_vektor)
+
+
+# =====================================================================@042959=
 # 3. podnaloga
-# Napiši funkcijo `odstrani_samoglasnike`, ki sprejme niz in vrne nov niz brez
-# začetnih samoglasnikov.
-# 
-#     >>> odstrani_samoglasnike("aeoIcesta")
-#     "cesta"
+# Osmerosmerke si običajno pripravimo na datotekah, in sicer ločeno mrežo ter
+# besede, ki jih iščemo. Sestavi funkcijo `osmerosmerka(dat_mreza, dat_besede)`,
+# ki iz datoteke z imenom `dat_mreza` prebere mrežo, iz datoteke z imenom
+# `dat_besede` pa besede ter reši dobljeno osmerosmerko. Predpostaviš lahko,
+# da se vse besede res nahajajo v mreži. Funkcija naj vrne niz, sestavljen
+# iz neprečrtanih črk v mreži, brano po vrsticah.
+#
+# Če imamo datoteko z imenom `'mreza.txt'` z vsebino
+#
+#     atene
+#     otrop
+#     oeisl
+#     blmoa
+#
+# in datoteko z imenom `'besede.txt'` z vsebino
+#
+#     alpe
+#     atene
+#     bern
+#     porto
+#     rim
+#
+# potem dobimo:
+#
+#     >>> osmerosmerka('mreza.txt', 'besede.txt')
+#     'oslo'
 # =============================================================================
-def odstrani_samoglasnike(niz):
-    if niz[0] not in 'aeiouAEIOU':
-        return niz
-    else:
-       return odstrani_samoglasnike(niz[1:])
-        
-# =====================================================================@027484=
-# 4. podnaloga
-# Sestavite funkcijo `obrni_oklepaje`, ki sprejme niz, ki vsebuje zgolj cela
-# števila, operatorje in oklepaje "(" in ")" ter vrne niz, kjer so vsi oklepaji
-# obrnjeni (znak ")" se pretvori v "(" in obratno).
-# 
-#     >>> obrni_oklepaje("((()(3+4)))")
-#     ")))()3+4((("
-# =============================================================================
-def obrni_oklepaje(niz):
-    return niz.replace('(','X').replace(')','(').replace('X',')') 
-    
-# =====================================================================@027485=
-# 5. podnaloga
-# Sestavite funkcijo `prestej_posebno`, ki sprejme niz, znak `c` in število `k`
-# ter prešteje število presledkov za `k`-to pojavitvijo znaka `c`.
-# 
-#     >>> prestej_posebno("aa  a ", "a", 2)
-#     3
-#     >>> prestej_posebno("aa  a ", "a", 3)
-#     1
-# =============================================================================
-
-def prestej_posebno(niz, znak, pojavitev):
-    st = 0
-
-    for indeks, crka in enumerate(niz):
-        if crka == znak:
-            st += 1
-
-        if st == pojavitev:
-            p = 0
-            for c in niz[indeks + 1:]:
-                if c == ' ':
-                    p += 1
-                else:
-                    break
-            return p
-
-    return 0
-
-    
-    
-        
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+def osmerosmerka(dat_mreza, dat_besede):
+    krizanka = []
+    geslo = []
+    with open(dat_mreza, "r", encoding="utf-8") as dat:
+        vsebina_mreze = dat.read()
+        mreza = vsebina_mreze.split("\n")[:-1]
+    with open(dat_besede, "r", encoding="utf-8") as dat:
+        vsebina_besed = dat.read()
+        words = vsebina_besed.split("\n")[:-1]
+        for row in mreza:
+            krizanka.append(list(row))
+    for word in words:
+        (x, y), (dx, dy) = poisci_besedo(mreza, word)
+        for i in range(len(word)):
+            krizanka[x + i * dx][y + i * dy] = "*"
+    for row in krizanka:
+        geslo.append("".join(row))
+    return ("".join(geslo)).replace('*','')
 
 
 # ============================================================================@
@@ -696,12 +636,19 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoyNzQ5MSwidXNlciI6MTE1Mzh9:1vzdCS:Fx9ekk7zOgtEy8nid1HcKbIUyHi3QjAfR6uAseh5DTg"
+        ] = "eyJwYXJ0Ijo0Mjk1NywidXNlciI6MTE1Mzh9:1wWf1A:HdcgqIR9xrBdxZHWhr3RRZYbtEhl-LYk7X5V12J-Lt8"
         try:
-            Check.equal('prezrcali("x")', 'x')
-            Check.equal('prezrcali("xy")', 'yx')
-            Check.equal('prezrcali("abeceda")', 'adeceba')
-            Check.equal('prezrcali("alisebomartanatramobesila")', 'alisebomartanatramobesila')
+            mreza1 = ["atene", "otrop", "oeisl", "blmoa"]
+            podatki = [
+                (mreza1, "bern", (3, 0), (-1, 1), True),
+                (mreza1, "plaz", (1, 4), (1, 0), False),
+                (mreza1, "porto", (1, 4), (0, -1), True),
+                (mreza1, "porto", (2, 4), (0, -1), False),
+                (mreza1, "porto", (1, 4), (1, -1), False),
+            ]
+            for mreza, beseda, zacetek, smer, rezultat in podatki:
+                if not Check.equal(f'preveri_besedo({mreza}, {beseda!r}, {zacetek}, {smer})', rezultat):
+                    break
         except TimeoutError:
             Check.error("Dovoljen čas izvajanja presežen")
         except Exception:
@@ -713,12 +660,17 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoyNzQ5MiwidXNlciI6MTE1Mzh9:1vzdCS:TEp851iNqWTMmAZjvegubZjGakJDTXkZCr2G48IjDqQ"
+        ] = "eyJwYXJ0Ijo0Mjk1OCwidXNlciI6MTE1Mzh9:1wWf1A:ifxJJnDGKB9HG613ztdORP_Tu4QvF6-_udRm6OIUF4g"
         try:
-            Check.equal('je_palindrom("kajak")', True)
-            Check.equal('je_palindrom("abeceda")', False)
-            Check.equal('je_palindrom("oko")', True)
-            Check.equal('je_palindrom("neradodaren")', True)
+            mreza1 = ["atene", "otrop", "oeisl", "blmoa"]
+            podatki = [
+                (mreza1, "bern", ((3, 0), (-1, 1))),
+                (mreza1, "porto", ((1, 4), (0, -1))),
+                (mreza1, "plaz", None),
+            ]
+            for mreza, beseda, rezultat in podatki:
+                if not Check.equal(f'poisci_besedo({mreza}, {beseda!r})', rezultat):
+                    break
         except TimeoutError:
             Check.error("Dovoljen čas izvajanja presežen")
         except Exception:
@@ -730,46 +682,24 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoyNzQ4MywidXNlciI6MTE1Mzh9:1vzdCS:-oUzPcTTIggYdzvNzbRCouP0ipUknVrpekydVrriT-4"
+        ] = "eyJwYXJ0Ijo0Mjk1OSwidXNlciI6MTE1Mzh9:1wWf1A:EE8rnRQxf2OyNScK8jE8kraFTHyMOLsnHBc6TSVbwT4"
         try:
-            Check.equal('odstrani_samoglasnike("aeoIcesta")', "cesta")
-            Check.secret(odstrani_samoglasnike("laika"))
-            Check.secret(odstrani_samoglasnike("aeter"))
-        except TimeoutError:
-            Check.error("Dovoljen čas izvajanja presežen")
-        except Exception:
-            Check.error(
-                "Testi sprožijo izjemo\n  {0}",
-                "\n  ".join(traceback.format_exc().split("\n"))[:-2],
-            )
-
-    if Check.part():
-        Check.current_part[
-            "token"
-        ] = "eyJwYXJ0IjoyNzQ4NCwidXNlciI6MTE1Mzh9:1vzdCS:Ar49MQ1-7Dnwuus-u28CET2AyE4REsanWlVhruW9Jvo"
-        try:
-            Check.equal('obrni_oklepaje("((()(3+4)))")', ")))()3+4(((")
-            Check.secret(obrni_oklepaje("1234()"))
-            Check.secret(obrni_oklepaje("1(2(3(4))))))))))"))
-        except TimeoutError:
-            Check.error("Dovoljen čas izvajanja presežen")
-        except Exception:
-            Check.error(
-                "Testi sprožijo izjemo\n  {0}",
-                "\n  ".join(traceback.format_exc().split("\n"))[:-2],
-            )
-
-    if Check.part():
-        Check.current_part[
-            "token"
-        ] = "eyJwYXJ0IjoyNzQ4NSwidXNlciI6MTE1Mzh9:1vzdCS:Ql_v8ln_T-CKk3sxR8_A12r_Siwfj9G2p-8ZWdf17GM"
-        try:
-            Check.equal('prestej_posebno("aa  a ", "a", 2)', 3)
-            Check.equal('prestej_posebno("aa  a ", "a", 3)', 1)
-            Check.secret(prestej_posebno("1234()", "3", 5))
-            Check.secret(prestej_posebno("xyxxx     x x x", "x", 4))
-            Check.secret(prestej_posebno("xyxxx     x x x", "x", 5))
-            Check.secret(prestej_posebno("xyxxx     x x x", "x", 6))
+            mreza1 = ["kru", "nia", "osa"]
+            besede1 = ["osa", "ris"]
+            mreza2 = ["atene", "otrop", "oeisl", "blmoa"]
+            besede2 = ["alpe", "atene", "bern", "porto", "rim"]
+            mreza3 = ["jiggacinšumj", "anmolešniknj", "zialbjavžaue", "bcrteacetral", "eveiszlsčcze", "calguooeibin", "rtatdkksrnam", "ossiigiiriže", "bicvalgiježd", "llacirevevlv", "praproticeie", "psmrekaruhid"]
+            besede3 = ["bor", "dihur", "divjikostanj", "goba", "iglavci", "jazbec", "jelen", "jež", "jurček", "lešnik", "lisica", "list", "listavci", "marela", "medved", "mušnica", "praprot", "pravikostanj", "smreka", "srna", "veverica", "zajec", "želod", "žir"]
+            podatki = [
+                ("mreza1.txt", mreza1, "besede1.txt", besede1, "kuna"),
+                ("mreza2.txt", mreza2, "besede2.txt", besede2, "oslo"),
+                ("mreza3.txt", mreza3, "besede3.txt", besede3, "iglavecizgubiiglice"),
+            ]
+            for ime_mreza, vsebina_mreza, ime_besede, vsebina_besede, rezultat in podatki:
+                with Check.in_file(ime_mreza, vsebina_mreza, encoding="utf8"):
+                    with Check.in_file(ime_besede, vsebina_besede, encoding="utf8"):
+                        if not Check.equal(f'osmerosmerka({ime_mreza!r}, {ime_besede!r})', rezultat):
+                            break
         except TimeoutError:
             Check.error("Dovoljen čas izvajanja presežen")
         except Exception:

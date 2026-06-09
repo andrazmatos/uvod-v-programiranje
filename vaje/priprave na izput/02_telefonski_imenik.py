@@ -1,184 +1,77 @@
 # =============================================================================
-# Vgrajene metode
-# =====================================================================@027491=
+# Telefonski imenik
+#
+# Sestavili bomo telefonski imenik. Na Tomotu vas že čakata napol pripravljena razreda `Oseba` in `Imenik`. Prvi predstavlja osebo, natačneje z njenim imenom, priimkom, in (opcijsko) vzdevkom; drugi pa hrani informacije kateri telefonski številki pripada katera oseba.
+# =====================================================================@043023=
 # 1. podnaloga
-# Sestavite funkcijo `prezrcali`, ki vrne prezrcaljen niz.
-# 
-#     >>> prezrcali('abeceda')
-#     'adeceba'
+# Razredu `Oseba` dodajte ustrezni metodi `__repr__` in `__str__`. Oseba se predstavi kot `Ime Priimek`, če nima vzdevka, ter kot `Ime "Vzdevek" Priimek`, če ga ima.
 # =============================================================================
-def prezrcali(niz):
-    # if len(niz) < 2:
-    #     return niz
-    # else:
-    #     return niz1[-1] + prezrcali(niz[:-1])
-    return niz[::-1]
-# =====================================================================@027492=
+class Oseba:
+    def __init__(self, ime, priimek, vzdevek=None):
+        self.ime = ime
+        self.priimek = priimek
+        self.vzdevek = vzdevek
+
+    def __eq__(self, other):
+        return (self.ime, self.priimek, self.vzdevek) == (
+            other.ime,
+            other.priimek,
+            other.vzdevek,
+        )
+
+    def __str__(self):
+        if self.vzdevek:
+            return f'{self.ime} "{self.vzdevek}" {self.priimek}'
+        else:
+            return f"{self.ime} {self.priimek}"
+
+    def __repr__(self):
+        if self.vzdevek:
+            return f"Oseba('{self.ime}', '{self.priimek}', vzdevek='{self.vzdevek}')"
+        else:
+            return f"Oseba('{self.ime}', '{self.priimek}', vzdevek={self.vzdevek})"
+
+
+# =====================================================================@043024=
 # 2. podnaloga
-# Sestavite funkcijo `je_palindrom`, ki preveri, če je niz palindrom.
-# 
-#     >>> je_palindrom('kajak')
-#     True
+# Razredu `Imenik` dodajte metodo `dodaj`, ki kot argumenta prejme telefonsko številko (predstavljeno kot niz) in osebo, ter si pod podano številko shrani podano osebo. Metoda naj preveri, da je telefonska številka veljavna, tj., vsebuje lahko le števke, z izjemo prvega znaka, ki je lahko znak `+`. Metoda naj preveri še, da je podana oseba res objekt razreda `Oseba`; tu si lahko pomagate z vgrajeno funkcijo `isinstance`. Če številka ali oseba nista veljavni, naj metoda ne naredi ničesar.
 # =============================================================================
-def je_palindrom(niz):
-    return niz == prezrcali(niz)
-# =====================================================================@027483=
+class Imenik:
+    def __init__(self):
+        self.imenik = {}
+
+    def dodaj(self, fonska, oseba):
+        i = isinstance(oseba, Oseba)
+        if fonska[0] not in "+1234567890":
+            i = False
+        for stevka in fonska[1:]:
+            if stevka not in "0123456789":
+                i = False
+        if i:
+            self.imenik[fonska] = oseba
+
+
+# =====================================================================@043025=
 # 3. podnaloga
-# Napiši funkcijo `odstrani_samoglasnike`, ki sprejme niz in vrne nov niz brez
-# začetnih samoglasnikov.
-# 
-#     >>> odstrani_samoglasnike("aeoIcesta")
-#     "cesta"
+# Razredu `Imenik` dodajte še metodo `klice`, ki sprejme telefonsko številko in
+# preveri ali kliče znana številka, tj., vrne niz oblike `Kliče: Ime "Vzdevek" Priimek`,
+# če oseba je v imeniku, sicer pa naj vrne niz oblike `Kliče: neznana številka`.
+# Opis osebe naj metoda dobi neposredno iz razreda `Oseba`.
+#
+# Primer:
+#
+#     >>> i = Imenik()
+#     >>> i.dodaj('+123456', Oseba('Ana', 'Celjska', vzdevek='Kraljica'))
+#     >>> i.klice('+123456')
+#     'Kliče: Ana "Kraljica" Celjska'
+#     >>> i.klice('654321')
+#     'Kliče: neznana številka'
 # =============================================================================
-def odstrani_samoglasnike(niz):
-    if niz[0] not in 'aeiouAEIOU':
-        return niz
-    else:
-       return odstrani_samoglasnike(niz[1:])
-        
-# =====================================================================@027484=
-# 4. podnaloga
-# Sestavite funkcijo `obrni_oklepaje`, ki sprejme niz, ki vsebuje zgolj cela
-# števila, operatorje in oklepaje "(" in ")" ter vrne niz, kjer so vsi oklepaji
-# obrnjeni (znak ")" se pretvori v "(" in obratno).
-# 
-#     >>> obrni_oklepaje("((()(3+4)))")
-#     ")))()3+4((("
-# =============================================================================
-def obrni_oklepaje(niz):
-    return niz.replace('(','X').replace(')','(').replace('X',')') 
-    
-# =====================================================================@027485=
-# 5. podnaloga
-# Sestavite funkcijo `prestej_posebno`, ki sprejme niz, znak `c` in število `k`
-# ter prešteje število presledkov za `k`-to pojavitvijo znaka `c`.
-# 
-#     >>> prestej_posebno("aa  a ", "a", 2)
-#     3
-#     >>> prestej_posebno("aa  a ", "a", 3)
-#     1
-# =============================================================================
-
-def prestej_posebno(niz, znak, pojavitev):
-    st = 0
-
-    for indeks, crka in enumerate(niz):
-        if crka == znak:
-            st += 1
-
-        if st == pojavitev:
-            p = 0
-            for c in niz[indeks + 1:]:
-                if c == ' ':
-                    p += 1
-                else:
-                    break
-            return p
-
-    return 0
-
-    
-    
-        
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    def klice(self, fonska):
+        if fonska not in self.imenik:
+            return 'Kliče: neznana številka'
+        if fonska in self.imenik:
+            return f'Kliče: {self.imenik[fonska]}'
 
 # ============================================================================@
 # fmt: off
@@ -696,12 +589,15 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoyNzQ5MSwidXNlciI6MTE1Mzh9:1vzdCS:Fx9ekk7zOgtEy8nid1HcKbIUyHi3QjAfR6uAseh5DTg"
+        ] = "eyJwYXJ0Ijo0MzAyMywidXNlciI6MTE1Mzh9:1wVtMH:V_zeECL5ixBc4q_HKDnv-ASzcrLiBsRruMpC4e6Ucvc"
         try:
-            Check.equal('prezrcali("x")', 'x')
-            Check.equal('prezrcali("xy")', 'yx')
-            Check.equal('prezrcali("abeceda")', 'adeceba')
-            Check.equal('prezrcali("alisebomartanatramobesila")', 'alisebomartanatramobesila')
+            Check.equal("repr(Oseba('Janez', 'Kranjski'))", "Oseba('Janez', 'Kranjski', vzdevek=None)")
+            Check.equal("repr(Oseba('Janez', 'Kranjski', vzdevek=None))", "Oseba('Janez', 'Kranjski', vzdevek=None)")
+            Check.equal("repr(Oseba('Janez', 'Kranjski', vzdevek='Đoni'))", "Oseba('Janez', 'Kranjski', vzdevek='Đoni')")
+            
+            Check.equal("str(Oseba('Janez', 'Kranjski'))", "Janez Kranjski")
+            Check.equal("str(Oseba('Janez', 'Kranjski', vzdevek=None))", "Janez Kranjski")
+            Check.equal("str(Oseba('Janez', 'Kranjski', vzdevek='Đoni'))", 'Janez "Đoni" Kranjski')
         except TimeoutError:
             Check.error("Dovoljen čas izvajanja presežen")
         except Exception:
@@ -713,12 +609,62 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoyNzQ5MiwidXNlciI6MTE1Mzh9:1vzdCS:TEp851iNqWTMmAZjvegubZjGakJDTXkZCr2G48IjDqQ"
+        ] = "eyJwYXJ0Ijo0MzAyNCwidXNlciI6MTE1Mzh9:1wVtMH:zfM3eHNSoIeMa71og--MTW19XYoFFfVjNBcQdLhlPGo"
         try:
-            Check.equal('je_palindrom("kajak")', True)
-            Check.equal('je_palindrom("abeceda")', False)
-            Check.equal('je_palindrom("oko")', True)
-            Check.equal('je_palindrom("neradodaren")', True)
+            Check.run(
+                [
+                    'i = Imenik()',
+                    'i.dodaj("123456", Oseba("Janez", "Kranjski"))',
+                    'i.dodaj("123456", "Ana Celjska")',
+                    'o = i.imenik["123456"]'
+                ],
+                {
+                    'o': Oseba("Janez", "Kranjski")
+                }
+            )
+            
+            Check.run(
+                [
+                    'i = Imenik()',
+                    'i.dodaj("+123456", Oseba("Janez", "Kranjski"))',
+                    'i.dodaj("65+4321", Oseba("Ana", "Celjska", vzdevek="Kraljica"))',
+                    'i.dodaj("++777777", Oseba("Boris", "Veliki"))',
+                    'v1 = "+123456" in i.imenik',
+                    'v2 = "65+4321" in i.imenik',
+                    'v3 = "++777777" in i.imenik',
+                ],
+                {
+                    'v1': True,
+                    'v2': False,
+                    'v3': False
+                }
+            )
+            
+            
+            Check.run(
+                [
+                    'i = Imenik()',
+                    'i.dodaj("123456", Oseba("Janez", "Kranjski"))',
+                    'i.dodaj("654321", Oseba("Ana", "Celjska", vzdevek="Kraljica"))',
+                    'o1 = i.imenik["123456"]',
+                    'o2 = i.imenik["654321"]'
+                ],
+                {
+                    'o1': Oseba("Janez", "Kranjski"),
+                    'o2': Oseba("Ana", "Celjska", vzdevek="Kraljica")
+                }
+            )
+            
+            Check.run(
+                [
+                    'i = Imenik()',
+                    'i.dodaj("123456", "Ana Celjska")',
+                    'obstaja = "123456" in i.imenik'
+                ],
+                {
+                    'obstaja': False,
+                }
+            )
         except TimeoutError:
             Check.error("Dovoljen čas izvajanja presežen")
         except Exception:
@@ -730,46 +676,47 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoyNzQ4MywidXNlciI6MTE1Mzh9:1vzdCS:-oUzPcTTIggYdzvNzbRCouP0ipUknVrpekydVrriT-4"
+        ] = "eyJwYXJ0Ijo0MzAyNSwidXNlciI6MTE1Mzh9:1wVtMH:bIX6aNmXjCFgV7D7GofQaBNgMOjFkBZM1DvVjeV34pY"
         try:
-            Check.equal('odstrani_samoglasnike("aeoIcesta")', "cesta")
-            Check.secret(odstrani_samoglasnike("laika"))
-            Check.secret(odstrani_samoglasnike("aeter"))
-        except TimeoutError:
-            Check.error("Dovoljen čas izvajanja presežen")
-        except Exception:
-            Check.error(
-                "Testi sprožijo izjemo\n  {0}",
-                "\n  ".join(traceback.format_exc().split("\n"))[:-2],
+            Check.run(
+                [
+                    'i = Imenik()',
+                    'i.dodaj("123456", Oseba("Janez", "Kranjski"))',
+                    'i.dodaj("123456", "Ana Celjska")',
+                    'k = i.klice("123456")'
+                ],
+                {
+                    'k': "Kliče: Janez Kranjski"
+                }
             )
-
-    if Check.part():
-        Check.current_part[
-            "token"
-        ] = "eyJwYXJ0IjoyNzQ4NCwidXNlciI6MTE1Mzh9:1vzdCS:Ar49MQ1-7Dnwuus-u28CET2AyE4REsanWlVhruW9Jvo"
-        try:
-            Check.equal('obrni_oklepaje("((()(3+4)))")', ")))()3+4(((")
-            Check.secret(obrni_oklepaje("1234()"))
-            Check.secret(obrni_oklepaje("1(2(3(4))))))))))"))
-        except TimeoutError:
-            Check.error("Dovoljen čas izvajanja presežen")
-        except Exception:
-            Check.error(
-                "Testi sprožijo izjemo\n  {0}",
-                "\n  ".join(traceback.format_exc().split("\n"))[:-2],
+            
+            Check.run(
+                [
+                    'i = Imenik()',
+                    'i.dodaj("123456", Oseba("Janez", "Kranjski"))',
+                    'i.dodaj("654321", Oseba("Ana", "Celjska", vzdevek="Kraljica"))',
+                    'k1 = i.klice("123456")',
+                    'k2 = i.klice("654321")',
+                    'k3 = i.klice("100")'
+                ],
+                {
+                    'k1': "Kliče: Janez Kranjski",
+                    'k2': 'Kliče: Ana "Kraljica" Celjska',
+                    'k3': "Kliče: neznana številka"
+                }
             )
-
-    if Check.part():
-        Check.current_part[
-            "token"
-        ] = "eyJwYXJ0IjoyNzQ4NSwidXNlciI6MTE1Mzh9:1vzdCS:Ql_v8ln_T-CKk3sxR8_A12r_Siwfj9G2p-8ZWdf17GM"
-        try:
-            Check.equal('prestej_posebno("aa  a ", "a", 2)', 3)
-            Check.equal('prestej_posebno("aa  a ", "a", 3)', 1)
-            Check.secret(prestej_posebno("1234()", "3", 5))
-            Check.secret(prestej_posebno("xyxxx     x x x", "x", 4))
-            Check.secret(prestej_posebno("xyxxx     x x x", "x", 5))
-            Check.secret(prestej_posebno("xyxxx     x x x", "x", 6))
+            
+            Check.run(
+                [
+                    'i = Imenik()',
+                    'k1 = i.klice("123456")',
+                    'k2 = i.klice("200")',
+                ],
+                {
+                    'k1': "Kliče: neznana številka",
+                    'k2': "Kliče: neznana številka"
+                }
+            )
         except TimeoutError:
             Check.error("Dovoljen čas izvajanja presežen")
         except Exception:

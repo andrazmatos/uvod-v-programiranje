@@ -1,85 +1,110 @@
 # =============================================================================
-# Vgrajene metode
-# =====================================================================@027491=
+# Analiza DNA
+#
+# DNA je zaporedje štirih različnih *nukleotidov*: `A`, `T`, `G` in `C`. Takšno 
+# je na primer zaporedje `ATGGCTA`. *Kodon* je skupina treh zaporednih nukleotidov, 
+# na primer `ATG`.
+# =====================================================================@043021=
 # 1. podnaloga
-# Sestavite funkcijo `prezrcali`, ki vrne prezrcaljen niz.
+# *Komplement* zaporedja DNA je zaporedje DNA, ki ga dobimo tako, da vsak nukleotid
+# zamenjamo z njegovim veznim nukleotidom (vežeta se `A` in `T` ter `G` in `C`). 
+# Na primer, komplement zaporedja `ATGGCTA` je `TACCGAT`.
 # 
-#     >>> prezrcali('abeceda')
-#     'adeceba'
+# Sestavite funkcijo `komplement(dna)`, ki sestavi in vrne komplement danega 
+# zaporedja DNA. Če vhodni niz ne določa zaporedja DNA, naj funkcija vrne `None`.
+# 
+#     >>> komplement('ATGGCTA')
+#     'TACCGAT'
+#     >>> komplement('ATGgCTA')
+#     None
 # =============================================================================
-def prezrcali(niz):
-    # if len(niz) < 2:
-    #     return niz
-    # else:
-    #     return niz1[-1] + prezrcali(niz[:-1])
-    return niz[::-1]
-# =====================================================================@027492=
+# def komplement(niz):
+#     dovoljen = 'ATCG'
+#     komplement = ''
+#     for crka in niz:
+#         if crka not in dovoljen:
+#             return None
+#         elif crka == 'A':
+#             komplement += 'T'
+#         elif crka == 'T':
+#             komplement += 'A'
+#         elif crka == 'G':
+#             komplement += 'C'
+#         elif crka == 'C':
+#             komplement += 'G'
+#     return komplement
+
+def komplement(dna):
+    preslikava = {'A': 'T', 'T': 'A', 'G': 'C', 'C': 'G'}
+    kompl = ''
+    for nukleotid in dna:
+        if nukleotid not in preslikava:
+            return None
+        kompl += preslikava[nukleotid]
+    return kompl
+# =====================================================================@043020=
 # 2. podnaloga
-# Sestavite funkcijo `je_palindrom`, ki preveri, če je niz palindrom.
+# *Bralni okvir* je ena od treh možnosti branja zaporedja DNA v obliki 
+# neprekrivajočih se kodonov, odvisno od tega, ali začnemo brati pri prvem,
+# drugem ali tretjem nukleotidu. Pri zaporedju `ATGGCTA` imamo tako tri
+# bralne okvirje: `ATG GCT`, `TGG CTA` in `GGC`.
 # 
-#     >>> je_palindrom('kajak')
-#     True
+# Sestavite funkcijo `bralni_okvir(dna, indeks)`, ki sprejme zaporedje DNA (niz)
+# in vrne seznam kodonov (seznam nizov) bralnega okvirja, ki se začne na mestu 
+# z danim indeksom. Če vhodni niz ne določa zaporedja DNA, naj funkcija vrne `None`.
+# 
+#     >>> bralni_okvir('ATGGCTA', 1)
+#     ['TGG', 'CTA']
+#     >>> bralni_okvir('xTGATTCA', 2)
+#     None
 # =============================================================================
-def je_palindrom(niz):
-    return niz == prezrcali(niz)
-# =====================================================================@027483=
+def bralni_okvir(dna, indeks):
+    if komplement(dna) == None:
+        return None
+    kompl = dna[indeks:]
+    seznam_nizov = []
+    dolzina = len(kompl)
+    i = 0
+    while i < dolzina-2:
+        seznam_nizov.append(kompl[i:i+3])
+        i = i+3
+    return seznam_nizov
+    
+# =====================================================================@043022=
 # 3. podnaloga
-# Napiši funkcijo `odstrani_samoglasnike`, ki sprejme niz in vrne nov niz brez
-# začetnih samoglasnikov.
+# V DNA zaporedju se gen začne z začetnim kodonom `ATG` in konča pri prvem
+# stop kodonu, ki sledi začetnemu kodonu. Stop kodoni so `TAA`, `TAG` in `TGA`. 
 # 
-#     >>> odstrani_samoglasnike("aeoIcesta")
-#     "cesta"
-# =============================================================================
-def odstrani_samoglasnike(niz):
-    if niz[0] not in 'aeiouAEIOU':
-        return niz
-    else:
-       return odstrani_samoglasnike(niz[1:])
-        
-# =====================================================================@027484=
-# 4. podnaloga
-# Sestavite funkcijo `obrni_oklepaje`, ki sprejme niz, ki vsebuje zgolj cela
-# števila, operatorje in oklepaje "(" in ")" ter vrne niz, kjer so vsi oklepaji
-# obrnjeni (znak ")" se pretvori v "(" in obratno).
+# Sestavite funkcijo `najdaljsi_gen(okvir)`, ki za dani bralni okvir
+# (seznam kodonov) vrne najdaljši gen (seznam kodonov). Če v bralnem okvirju 
+# ni nobenega gena, naj funkcija vrne `None`. Če je najdaljših genov več,
+# naj funkcija vrne prvega izmed njih.
 # 
-#     >>> obrni_oklepaje("((()(3+4)))")
-#     ")))()3+4((("
-# =============================================================================
-def obrni_oklepaje(niz):
-    return niz.replace('(','X').replace(')','(').replace('X',')') 
-    
-# =====================================================================@027485=
-# 5. podnaloga
-# Sestavite funkcijo `prestej_posebno`, ki sprejme niz, znak `c` in število `k`
-# ter prešteje število presledkov za `k`-to pojavitvijo znaka `c`.
+#     >>> najdaljsi_gen(['ATG', 'TAA', 'ATG', 'CCC', 'TAA'])
+#     ['ATG', 'CCC', 'TAA']
+#     >>> najdaljsi_gen(['ATG', 'CCC'])
+#     None
 # 
-#     >>> prestej_posebno("aa  a ", "a", 2)
-#     3
-#     >>> prestej_posebno("aa  a ", "a", 3)
-#     1
+# Namig: Zanko predčasno končamo z ukazom `break`.
 # =============================================================================
-
-def prestej_posebno(niz, znak, pojavitev):
-    st = 0
-
-    for indeks, crka in enumerate(niz):
-        if crka == znak:
-            st += 1
-
-        if st == pojavitev:
-            p = 0
-            for c in niz[indeks + 1:]:
-                if c == ' ':
-                    p += 1
-                else:
+def najdaljsi_gen(okvir):
+    gen = []
+    stop = {'TAA', 'TGA', 'TAG'}
+    for i, v in enumerate(okvir):
+        if v == 'ATG':
+            gen_test = []
+            for t in okvir[i:]:
+                if t in stop:
+                    gen_test.append(t)
                     break
-            return p
+                gen_test.append(t)
+            if len(gen_test)>len(gen) and gen_test[-1] in stop:
+                gen = gen_test[:]
+    if not gen:
+        return None
+    return gen
+          
 
-    return 0
-
-    
-    
-        
 
 
 
@@ -696,12 +721,18 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoyNzQ5MSwidXNlciI6MTE1Mzh9:1vzdCS:Fx9ekk7zOgtEy8nid1HcKbIUyHi3QjAfR6uAseh5DTg"
+        ] = "eyJwYXJ0Ijo0MzAyMSwidXNlciI6MTE1Mzh9:1wVtMH:Vus08aPA8FSVroHFr_FdH3nmdTL_Lr-c-zMpi_CyGVI"
         try:
-            Check.equal('prezrcali("x")', 'x')
-            Check.equal('prezrcali("xy")', 'yx')
-            Check.equal('prezrcali("abeceda")', 'adeceba')
-            Check.equal('prezrcali("alisebomartanatramobesila")', 'alisebomartanatramobesila')
+            testni_primeri = [
+                ('ATGGCTA', 'TACCGAT'),
+                ('ATTGACCTAGCCATTGAATAGGTCCA', 'TAACTGGATCGGTAACTTATCCAGGT'),
+                ('', ''),
+                ('ATGgCTA', None),
+            ]
+            
+            for dna, rezultat in testni_primeri:
+                if not Check.equal(f"komplement({dna!r})", rezultat):
+                    break
         except TimeoutError:
             Check.error("Dovoljen čas izvajanja presežen")
         except Exception:
@@ -713,12 +744,28 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoyNzQ5MiwidXNlciI6MTE1Mzh9:1vzdCS:TEp851iNqWTMmAZjvegubZjGakJDTXkZCr2G48IjDqQ"
+        ] = "eyJwYXJ0Ijo0MzAyMCwidXNlciI6MTE1Mzh9:1wVtMH:IYzZX6TrRSZfiRUmNh8VqTgkMKyob8EaFEKqLxzulMA"
         try:
-            Check.equal('je_palindrom("kajak")', True)
-            Check.equal('je_palindrom("abeceda")', False)
-            Check.equal('je_palindrom("oko")', True)
-            Check.equal('je_palindrom("neradodaren")', True)
+            testni_primeri = [
+                ('ATGGCTA', 0, ['ATG', 'GCT']),
+                ('ATGGCTA', 1, ['TGG', 'CTA']),
+                ('ATGGCTA', 2, ['GGC']),
+                ('xTGATTCA', 2, None),
+                ('ATGBCTA', 1, None),
+                ('ATG123', 2, None),
+                ('ATG CTA', 0, None),
+                ('ATG', 0, ['ATG']),
+                ('ATG', 1, []),
+                ('ATG', 2, []),
+                ('', 0, []),
+                ('ATTGACCTAGCCATTGAATAGGTCCA', 0, ['ATT', 'GAC', 'CTA', 'GCC', 'ATT', 'GAA', 'TAG', 'GTC']),
+                ('ATTGACCTAGCCATTGAATAGGTCCA', 1, ['TTG', 'ACC', 'TAG', 'CCA', 'TTG', 'AAT', 'AGG', 'TCC']),
+                ('ATTGACCTAGCCATTGAATAGGTCCA', 2, ['TGA', 'CCT', 'AGC', 'CAT', 'TGA', 'ATA', 'GGT', 'CCA']),
+            ]
+            
+            for dna, indeks, rezultat in testni_primeri:
+                if not Check.equal(f"bralni_okvir({dna!r}, {indeks})", rezultat):
+                    break
         except TimeoutError:
             Check.error("Dovoljen čas izvajanja presežen")
         except Exception:
@@ -730,46 +777,26 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoyNzQ4MywidXNlciI6MTE1Mzh9:1vzdCS:-oUzPcTTIggYdzvNzbRCouP0ipUknVrpekydVrriT-4"
+        ] = "eyJwYXJ0Ijo0MzAyMiwidXNlciI6MTE1Mzh9:1wVtMH:6vtoPYrcULmdW6UbNZt8q3kORNPt33hNQS1Jynh0TiI"
         try:
-            Check.equal('odstrani_samoglasnike("aeoIcesta")', "cesta")
-            Check.secret(odstrani_samoglasnike("laika"))
-            Check.secret(odstrani_samoglasnike("aeter"))
-        except TimeoutError:
-            Check.error("Dovoljen čas izvajanja presežen")
-        except Exception:
-            Check.error(
-                "Testi sprožijo izjemo\n  {0}",
-                "\n  ".join(traceback.format_exc().split("\n"))[:-2],
-            )
-
-    if Check.part():
-        Check.current_part[
-            "token"
-        ] = "eyJwYXJ0IjoyNzQ4NCwidXNlciI6MTE1Mzh9:1vzdCS:Ar49MQ1-7Dnwuus-u28CET2AyE4REsanWlVhruW9Jvo"
-        try:
-            Check.equal('obrni_oklepaje("((()(3+4)))")', ")))()3+4(((")
-            Check.secret(obrni_oklepaje("1234()"))
-            Check.secret(obrni_oklepaje("1(2(3(4))))))))))"))
-        except TimeoutError:
-            Check.error("Dovoljen čas izvajanja presežen")
-        except Exception:
-            Check.error(
-                "Testi sprožijo izjemo\n  {0}",
-                "\n  ".join(traceback.format_exc().split("\n"))[:-2],
-            )
-
-    if Check.part():
-        Check.current_part[
-            "token"
-        ] = "eyJwYXJ0IjoyNzQ4NSwidXNlciI6MTE1Mzh9:1vzdCS:Ql_v8ln_T-CKk3sxR8_A12r_Siwfj9G2p-8ZWdf17GM"
-        try:
-            Check.equal('prestej_posebno("aa  a ", "a", 2)', 3)
-            Check.equal('prestej_posebno("aa  a ", "a", 3)', 1)
-            Check.secret(prestej_posebno("1234()", "3", 5))
-            Check.secret(prestej_posebno("xyxxx     x x x", "x", 4))
-            Check.secret(prestej_posebno("xyxxx     x x x", "x", 5))
-            Check.secret(prestej_posebno("xyxxx     x x x", "x", 6))
+            testni_primeri = [
+                (['ATG', 'TAA'], ['ATG', 'TAA']),
+                (['ATG', 'TAG'], ['ATG', 'TAG']),
+                (['ATG', 'TGA'], ['ATG', 'TGA']),
+                (['ATG'], None),
+                (['ATG', 'TAA', 'ATG', 'CCC', 'TAA'], ['ATG', 'CCC', 'TAA']),
+                (['TAA', 'ATG', 'ATG', 'CCC', 'TAA'], ['ATG', 'ATG', 'CCC', 'TAA']),
+                (['ATG', 'GGG', 'TAA', 'ATG', 'CCC', 'TAA'], ['ATG', 'GGG', 'TAA']),
+                (['ATG', 'ATG', 'TAA'], ['ATG', 'ATG', 'TAA']),
+                (['CGT', 'ATG', 'CCC', 'TAG'], ['ATG', 'CCC', 'TAG']),
+                (['ATG', 'CCC'], None),
+                (['TAA', 'CTG'], None),
+                ([''], None),
+            ]
+            
+            for okvir, rezultat in testni_primeri:
+                if not Check.equal(f"najdaljsi_gen({okvir})", rezultat):
+                    break
         except TimeoutError:
             Check.error("Dovoljen čas izvajanja presežen")
         except Exception:

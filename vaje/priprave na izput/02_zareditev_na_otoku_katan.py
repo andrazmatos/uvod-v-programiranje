@@ -1,86 +1,90 @@
 # =============================================================================
-# Vgrajene metode
-# =====================================================================@027491=
+# Zareditev na otoku Katan
+#
+# Na otoku Katan so se nam zaredili trdovratni naseljenci. Zganjajo obilico hrupa in ropajo naravne dobrine. Vsemu botruje roka usode, ki skozi met dveh 6-stranih kock določa, katere dobrine bodo naseljenci oropali.
+# =====================================================================@042955=
 # 1. podnaloga
-# Sestavite funkcijo `prezrcali`, ki vrne prezrcaljen niz.
+# Sestavite funkcijo `roka_usode`, ki simulira vsoto pik pri metu dveh (pravičnih) 6-stranih 
+# kock. Za naključna števila uporabite funkcijo `randint` v knjižnici `random`.
+# Funkcija naj ima tudi pomožni argument `vsota`. Če je argument podan, kar določi vsoto, ki
+# jo funkcija vrne.
 # 
-#     >>> prezrcali('abeceda')
-#     'adeceba'
+# Primer uporabe:
+# 
+#     >>> roka_usode()
+#     7
+#     >>> roka_usode(vsota=12)
+#     12
+# 
+# _Pozor:_ če argumetna `vsota` ne podamo, mora biti rezultat naključen.
 # =============================================================================
-def prezrcali(niz):
-    # if len(niz) < 2:
-    #     return niz
-    # else:
-    #     return niz1[-1] + prezrcali(niz[:-1])
-    return niz[::-1]
-# =====================================================================@027492=
+import random
+def roka_usode(vsota=random.randint(2,12)):
+    return vsota
+# =====================================================================@042956=
 # 2. podnaloga
-# Sestavite funkcijo `je_palindrom`, ki preveri, če je niz palindrom.
-# 
-#     >>> je_palindrom('kajak')
-#     True
+# Sestavite razred `Naseljenec`, ki bo predstavljal zarejenega naseljenca.
+# Konstruktor naj prejme ime naseljenca, ki ga shrani v atribut `ime`, poleg tega
+# pa naj pripravi še atributa `dobrine`, ki začne kot prazen seznam, in `rop`, ki
+# začne kot prazen slovar. Dodajte še ustrezni metodi `__str__` in `__repr__` (pravilnosti ene izmed njiju Tomo ne preverja).
 # =============================================================================
-def je_palindrom(niz):
-    return niz == prezrcali(niz)
-# =====================================================================@027483=
+class Naseljenec:
+    def __init__(self, ime):
+        self.ime = ime
+        self.dobrine = []
+        self.rop = {}
+
+    def __repr__(self):
+        return f"Naseljenec('{self.ime}')"
+    def __str__(self):
+        return f'Naseljencu je ime {self.ime}'
+        
+# =====================================================================@042960=
 # 3. podnaloga
-# Napiši funkcijo `odstrani_samoglasnike`, ki sprejme niz in vrne nov niz brez
-# začetnih samoglasnikov.
+# Razredu dodajte še metodo `ropa`, ki doda novo surovino za ropanje. 
+# Metoda naj kot argumenta sprejme število med 1 in 12 ter niz, ki opisuje, 
+# katero dobrino bo naseljenec oropal, če usoda z metom kock
+# določi to število. Posodobite atribut `rop` tako, da bo pod ključem podane vsote števila pik
+# shranjen seznam dobrin, ki jih naseljenec ob tem metu usode oropa.
 # 
-#     >>> odstrani_samoglasnike("aeoIcesta")
-#     "cesta"
-# =============================================================================
-def odstrani_samoglasnike(niz):
-    if niz[0] not in 'aeiouAEIOU':
-        return niz
-    else:
-       return odstrani_samoglasnike(niz[1:])
-        
-# =====================================================================@027484=
-# 4. podnaloga
-# Sestavite funkcijo `obrni_oklepaje`, ki sprejme niz, ki vsebuje zgolj cela
-# števila, operatorje in oklepaje "(" in ")" ter vrne niz, kjer so vsi oklepaji
-# obrnjeni (znak ")" se pretvori v "(" in obratno).
+# Poleg tega dodajte še metodo `usoda`, ki sprejme število med 1 in 12, ter na podlagi vrednosti v atributu `rop` v
+# naseljenčeve dobrine (tj. v atribut `dobrine`) doda tiste dobrine, ki jih s tem metom usode oropa. Metoda
+# naj tudi vrne seznam novo pridobljenih surovin.
 # 
-#     >>> obrni_oklepaje("((()(3+4)))")
-#     ")))()3+4((("
-# =============================================================================
-def obrni_oklepaje(niz):
-    return niz.replace('(','X').replace(')','(').replace('X',')') 
-    
-# =====================================================================@027485=
-# 5. podnaloga
-# Sestavite funkcijo `prestej_posebno`, ki sprejme niz, znak `c` in število `k`
-# ter prešteje število presledkov za `k`-to pojavitvijo znaka `c`.
+# Primer uporabe:
 # 
-#     >>> prestej_posebno("aa  a ", "a", 2)
-#     3
-#     >>> prestej_posebno("aa  a ", "a", 3)
-#     1
+#     >>> ana = Naseljenec('Ana')
+#     >>> ana.ropa(6, 'ovca')
+#     >>> ana.ropa(6, 'kamen')
+#     >>> ana.ropa(8, 'pšenica')
+#     >>> ana.ropa(11, 'glina')
+#     >>> ana.dobrine
+#     []
+#     >>> ana.usoda(6)
+#     ['ovca', 'kamen']
+#     >>> ana.dobrine
+#     ['ovca', 'kamen']
+#     >>> ana.usoda(8)
+#     ['pšenica']
+#     >>> ana.dobrine
+#     ['ovca', 'kamen', 'pšenica']
+#     >>> ana.usoda(4)
+#     []
+#     >>> ana.dobrine
+#     ['ovca', 'kamen', 'pšenica']
 # =============================================================================
+    def ropa(self, vsota, dobrina):
+        if vsota not in self.rop:
+            self.rop[vsota] = []
+        self.rop[vsota].append(dobrina)
 
-def prestej_posebno(niz, znak, pojavitev):
-    st = 0
+    def usoda(self, vsota):
+        if vsota not in self.rop:
+            return []
 
-    for indeks, crka in enumerate(niz):
-        if crka == znak:
-            st += 1
-
-        if st == pojavitev:
-            p = 0
-            for c in niz[indeks + 1:]:
-                if c == ' ':
-                    p += 1
-                else:
-                    break
-            return p
-
-    return 0
-
-    
-    
-        
-
+        nove_dobrine = self.rop[vsota]
+        self.dobrine.extend(nove_dobrine)
+        return nove_dobrine
 
 
 
@@ -696,12 +700,16 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoyNzQ5MSwidXNlciI6MTE1Mzh9:1vzdCS:Fx9ekk7zOgtEy8nid1HcKbIUyHi3QjAfR6uAseh5DTg"
+        ] = "eyJwYXJ0Ijo0Mjk1NSwidXNlciI6MTE1Mzh9:1wWf1A:gr8_l07k44ydLdGxyZdRJrLSWRY4V6sWaXK7avytxpM"
         try:
-            Check.equal('prezrcali("x")', 'x')
-            Check.equal('prezrcali("xy")', 'yx')
-            Check.equal('prezrcali("abeceda")', 'adeceba')
-            Check.equal('prezrcali("alisebomartanatramobesila")', 'alisebomartanatramobesila')
+            Check.equal('roka_usode(vsota=2)', 2)
+            Check.equal('roka_usode(vsota=3)', 3)
+            Check.equal('roka_usode(vsota=4)', 4)
+            Check.equal('roka_usode(vsota=5)', 5)
+            Check.equal('roka_usode(vsota=9)', 9)
+            Check.equal('roka_usode(vsota=10)', 10)
+            Check.equal('roka_usode(vsota=11)', 11)
+            Check.equal('roka_usode(vsota=12)', 12)
         except TimeoutError:
             Check.error("Dovoljen čas izvajanja presežen")
         except Exception:
@@ -713,12 +721,13 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoyNzQ5MiwidXNlciI6MTE1Mzh9:1vzdCS:TEp851iNqWTMmAZjvegubZjGakJDTXkZCr2G48IjDqQ"
+        ] = "eyJwYXJ0Ijo0Mjk1NiwidXNlciI6MTE1Mzh9:1wWf1A:ED4YbaXZuOlcn0BsElx1u6J-LdGFxbBtTMKL-gR-W7k"
         try:
-            Check.equal('je_palindrom("kajak")', True)
-            Check.equal('je_palindrom("abeceda")', False)
-            Check.equal('je_palindrom("oko")', True)
-            Check.equal('je_palindrom("neradodaren")', True)
+            Check.equal('repr(Naseljenec("Ana"))', "Naseljenec('Ana')")
+            Check.equal('Naseljenec("Ana").ime', "Ana")
+            Check.equal('Naseljenec("Eva").ime', "Eva")
+            Check.equal('Naseljenec("Ana").rop', {})
+            Check.equal('Naseljenec("Ana").dobrine', [])
         except TimeoutError:
             Check.error("Dovoljen čas izvajanja presežen")
         except Exception:
@@ -730,46 +739,35 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoyNzQ4MywidXNlciI6MTE1Mzh9:1vzdCS:-oUzPcTTIggYdzvNzbRCouP0ipUknVrpekydVrriT-4"
+        ] = "eyJwYXJ0Ijo0Mjk2MCwidXNlciI6MTE1Mzh9:1wWf1A:kxyFeEEBxv1vKTZsLigdPi6eTSvicLBLMWz-o63Zo6w"
         try:
-            Check.equal('odstrani_samoglasnike("aeoIcesta")', "cesta")
-            Check.secret(odstrani_samoglasnike("laika"))
-            Check.secret(odstrani_samoglasnike("aeter"))
-        except TimeoutError:
-            Check.error("Dovoljen čas izvajanja presežen")
-        except Exception:
-            Check.error(
-                "Testi sprožijo izjemo\n  {0}",
-                "\n  ".join(traceback.format_exc().split("\n"))[:-2],
-            )
-
-    if Check.part():
-        Check.current_part[
-            "token"
-        ] = "eyJwYXJ0IjoyNzQ4NCwidXNlciI6MTE1Mzh9:1vzdCS:Ar49MQ1-7Dnwuus-u28CET2AyE4REsanWlVhruW9Jvo"
-        try:
-            Check.equal('obrni_oklepaje("((()(3+4)))")', ")))()3+4(((")
-            Check.secret(obrni_oklepaje("1234()"))
-            Check.secret(obrni_oklepaje("1(2(3(4))))))))))"))
-        except TimeoutError:
-            Check.error("Dovoljen čas izvajanja presežen")
-        except Exception:
-            Check.error(
-                "Testi sprožijo izjemo\n  {0}",
-                "\n  ".join(traceback.format_exc().split("\n"))[:-2],
-            )
-
-    if Check.part():
-        Check.current_part[
-            "token"
-        ] = "eyJwYXJ0IjoyNzQ4NSwidXNlciI6MTE1Mzh9:1vzdCS:Ql_v8ln_T-CKk3sxR8_A12r_Siwfj9G2p-8ZWdf17GM"
-        try:
-            Check.equal('prestej_posebno("aa  a ", "a", 2)', 3)
-            Check.equal('prestej_posebno("aa  a ", "a", 3)', 1)
-            Check.secret(prestej_posebno("1234()", "3", 5))
-            Check.secret(prestej_posebno("xyxxx     x x x", "x", 4))
-            Check.secret(prestej_posebno("xyxxx     x x x", "x", 5))
-            Check.secret(prestej_posebno("xyxxx     x x x", "x", 6))
+            primer = [
+                "ana = Naseljenec('Ana')",
+                "ana.ropa(6, 'ovca')",
+                "ana.ropa(6, 'kamen')",
+                "ana.ropa(8, 'pšenica')",
+                "ana.ropa(11, 'glina')",
+                "a = ana.usoda(6)",
+                "b = ana.usoda(8)",
+                "c = ana.usoda(4)",
+                "d = ana.dobrine",
+            ]
+            
+            Check.run(primer, {'a': ['ovca', 'kamen'], 'b': ['pšenica'], 'c': [], 'd': ['ovca', 'kamen', 'pšenica']})
+            
+            primer = [
+                "ana = Naseljenec('Ana')",
+                "ana.ropa(6, 'ovca')",
+                "ana.ropa(6, 'kamen')",
+                "ana.ropa(8, 'pšenica')",
+                "ana.ropa(11, 'glina')",
+                "a = ana.usoda(7)",
+                "b = ana.usoda(7)",
+                "c = ana.usoda(7)",
+                "d = ana.dobrine",
+            ]
+            
+            Check.run(primer, {'a': [], 'b': [], 'c': [], 'd': []})
         except TimeoutError:
             Check.error("Dovoljen čas izvajanja presežen")
         except Exception:

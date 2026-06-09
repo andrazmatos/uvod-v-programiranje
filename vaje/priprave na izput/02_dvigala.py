@@ -1,183 +1,84 @@
 # =============================================================================
-# Vgrajene metode
-# =====================================================================@027491=
+# Dvigala
+#
+# Ob prenovi neke stavbe so vgradili nova dvigala, ki pa so malo posebna.
+# Uporabnik ob klicu dvigala ne izbira med smerema gor ali dol, pač pa izbere
+# kar ciljno nadstropje. Ko se dvigalo odzove na klic, se na konec njegovega
+# seznama postankov dodata nadstropje, kamor je bilo dvigalo poklicano in
+# nadstropje, kamor želi uporabnik, dvigalo pa se vmes nikjer ne ustavi.
+# Postanke izvaja po vrsti kot so zapisani v seznamu, po vsakem postanku pa
+# se številka nadstropja na začetku seznama postankov izbriše, tako da so v
+# seznamu vedno samo tisti postanki, ki jih mora dvigalo še izvršiti.
+# Programsko opremo za nadzor nad postanki je že zagotovil dobavitelj dvigal,
+# manjka samo še del kode, ki ob klicu dvigala poišče najbližje dvigalo.
+# To pa bo vaša naloga.
+# =====================================================================@042993=
 # 1. podnaloga
-# Sestavite funkcijo `prezrcali`, ki vrne prezrcaljen niz.
-# 
-#     >>> prezrcali('abeceda')
-#     'adeceba'
-# =============================================================================
-def prezrcali(niz):
-    # if len(niz) < 2:
-    #     return niz
-    # else:
-    #     return niz1[-1] + prezrcali(niz[:-1])
-    return niz[::-1]
-# =====================================================================@027492=
-# 2. podnaloga
-# Sestavite funkcijo `je_palindrom`, ki preveri, če je niz palindrom.
-# 
-#     >>> je_palindrom('kajak')
-#     True
-# =============================================================================
-def je_palindrom(niz):
-    return niz == prezrcali(niz)
-# =====================================================================@027483=
-# 3. podnaloga
-# Napiši funkcijo `odstrani_samoglasnike`, ki sprejme niz in vrne nov niz brez
-# začetnih samoglasnikov.
-# 
-#     >>> odstrani_samoglasnike("aeoIcesta")
-#     "cesta"
-# =============================================================================
-def odstrani_samoglasnike(niz):
-    if niz[0] not in 'aeiouAEIOU':
-        return niz
-    else:
-       return odstrani_samoglasnike(niz[1:])
-        
-# =====================================================================@027484=
-# 4. podnaloga
-# Sestavite funkcijo `obrni_oklepaje`, ki sprejme niz, ki vsebuje zgolj cela
-# števila, operatorje in oklepaje "(" in ")" ter vrne niz, kjer so vsi oklepaji
-# obrnjeni (znak ")" se pretvori v "(" in obratno).
-# 
-#     >>> obrni_oklepaje("((()(3+4)))")
-#     ")))()3+4((("
-# =============================================================================
-def obrni_oklepaje(niz):
-    return niz.replace('(','X').replace(')','(').replace('X',')') 
-    
-# =====================================================================@027485=
-# 5. podnaloga
-# Sestavite funkcijo `prestej_posebno`, ki sprejme niz, znak `c` in število `k`
-# ter prešteje število presledkov za `k`-to pojavitvijo znaka `c`.
-# 
-#     >>> prestej_posebno("aa  a ", "a", 2)
+# Sestavite razred `Dvigalo`, ki opisuje trenutno stanje dvigala. Konstruktor
+# naj za parametra prejme trenuten položaj dvigala in seznam postankov, ter
+# ju uporabi za nastavitev atributov `nadstropje` in `postanki`. Privzeti
+# vrednosti parametrov nastavite tako, da bomo dobili mirujoče dvigalo v pritličju.
+#
+# Sestavite še metodo `__repr__`, ki vrne znakovni opis dvigala kot je prikazano
+# v spodnjem primeru.
+#
+#     >>> dvigalo = Dvigalo(3, [1, 5, 0, 4])
+#     >>> dvigalo.nadstropje
 #     3
-#     >>> prestej_posebno("aa  a ", "a", 3)
-#     1
+#     >>> dvigalo.postanki
+#     [1, 5, 0, 4]
+#     >>> repr(dvigalo)
+#     'Dvigalo(3, [1, 5, 0, 4])'
 # =============================================================================
+class Dvigalo:
 
-def prestej_posebno(niz, znak, pojavitev):
-    st = 0
+    def __init__(self, nadstropje=0, postanki=None):
+        self.nadstropje = nadstropje
+        if postanki:
+            self.postanki = postanki
+        else:
+            self.postanki = []
 
-    for indeks, crka in enumerate(niz):
-        if crka == znak:
-            st += 1
+    def __repr__(self):
+        return f"Dvigalo({self.nadstropje}, {self.postanki})"
 
-        if st == pojavitev:
-            p = 0
-            for c in niz[indeks + 1:]:
-                if c == ' ':
-                    p += 1
-                else:
-                    break
-            return p
+    # =====================================================================@042994=
+    # 2. podnaloga
+    # Razredu `Dvigalo` dodajte metodo `razdalja`, ki izračuna in vrne razdaljo
+    # dvigala do danega nadstropja. Če dvigalo miruje, je razdalja enaka absolutni
+    # vrednosti razlike med trenutnim položajem in danim nadstropjem, sicer pa
+    # razdaljo dobimo kot vsoto razdalj od trenutnega položaja preko vseh postankov
+    # do danega nadstropja.
+    #
+    #     >>> dvigalo.razdalja(2)
+    #     17
+    # =============================================================================
 
-    return 0
+    def razdalja(self, zeljeno_nadstropje):
+        if not self.postanki:
+            return abs(self.nadstropje - zeljeno_nadstropje)
+        else:
+            distance = abs(self.nadstropje - self.postanki[0])
+            for index, postanek in enumerate(self.postanki[1:]):
+                distance += abs(self.postanki[index] - postanek)
+            return distance + abs(self.postanki[-1] - zeljeno_nadstropje)
 
+    # =====================================================================@042995=
+    # 3. podnaloga
+    # Sestavite še funkcijo `klic(nadstropje, dvigala)`, ki v seznamu dvigal
+    # poišče in vrne indeks tistega dvigala, ki je najbližje danemu nadstropju.
+    # Če je najbližjih dvigal več, naj vrne indeks prvega takšnega iz seznama.
+    # Predpostaviš lahko, da je v seznamu vsaj eno dvigalo.
+    #
+    #     >>> klic(3, [dvigalo, Dvigalo()])
+    #     1
+    # =============================================================================
     
-    
-        
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+def klic(zeljeno_nadstropje, dvigala):
+    distancias = []
+    for dvigalo in dvigala:
+        distancias.append(dvigalo.razdalja(zeljeno_nadstropje))
+    return distancias.index(min(distancias))
 
 
 # ============================================================================@
@@ -696,12 +597,30 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoyNzQ5MSwidXNlciI6MTE1Mzh9:1vzdCS:Fx9ekk7zOgtEy8nid1HcKbIUyHi3QjAfR6uAseh5DTg"
+        ] = "eyJwYXJ0Ijo0Mjk5MywidXNlciI6MTE1Mzh9:1wWxxC:69RQ3sXP3KbgGIyQQxjM3k-H6K68sTCZUbd0PRk6Uas"
         try:
-            Check.equal('prezrcali("x")', 'x')
-            Check.equal('prezrcali("xy")', 'yx')
-            Check.equal('prezrcali("abeceda")', 'adeceba')
-            Check.equal('prezrcali("alisebomartanatramobesila")', 'alisebomartanatramobesila')
+            podatki = [(3, [1, 5, 0, 4]), (0, []), (-1, [2, 5, 2, 0])]
+            for nadstropje, postanki in podatki:
+                program = [f'dvigalo = Dvigalo({nadstropje}, {postanki})', 'nadstropje = dvigalo.nadstropje', 'postanki = dvigalo.postanki', 'opis = repr(dvigalo)']
+                rezultat = {'nadstropje': nadstropje, 'postanki': postanki, 'opis': f'Dvigalo({nadstropje}, {postanki})'}
+                if not Check.run(program, rezultat):
+                    break
+            else:
+                podatki = [(3, []), (0, []), (-1, [])]
+                for nadstropje, postanki in podatki:
+                    program = [f'dvigalo = Dvigalo({nadstropje})', 'nadstropje = dvigalo.nadstropje', 'postanki = dvigalo.postanki', 'opis = repr(dvigalo)']
+                    rezultat = {'nadstropje': nadstropje, 'postanki': postanki, 'opis': f'Dvigalo({nadstropje}, {postanki})'}
+                    if not Check.run(program, rezultat):
+                        break
+                else:
+                    podatki = [(0, [])]
+                    for nadstropje, postanki in podatki:
+                        program = [f'dvigalo = Dvigalo()', 'nadstropje = dvigalo.nadstropje', 'postanki = dvigalo.postanki', 'opis = repr(dvigalo)']
+                        rezultat = {'nadstropje': nadstropje, 'postanki': postanki, 'opis': f'Dvigalo({nadstropje}, {postanki})'}
+                        if not Check.run(program, rezultat):
+                            break
+                    else:
+                        Check.run(['d1 = Dvigalo(1)', 'd2 = Dvigalo(2)', 'd1.postanki.append(0)', 'p1 = d1.postanki', 'p2 = d2.postanki'], {'p1': [0], 'p2': []})
         except TimeoutError:
             Check.error("Dovoljen čas izvajanja presežen")
         except Exception:
@@ -713,12 +632,22 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoyNzQ5MiwidXNlciI6MTE1Mzh9:1vzdCS:TEp851iNqWTMmAZjvegubZjGakJDTXkZCr2G48IjDqQ"
+        ] = "eyJwYXJ0Ijo0Mjk5NCwidXNlciI6MTE1Mzh9:1wWxxC:nd7l6MIeGJpCfpiGacdsgzUX55lEPsascSwpL2SF2FU"
         try:
-            Check.equal('je_palindrom("kajak")', True)
-            Check.equal('je_palindrom("abeceda")', False)
-            Check.equal('je_palindrom("oko")', True)
-            Check.equal('je_palindrom("neradodaren")', True)
+            podatki = [
+                (3, [1, 5, 0, 4], 2, 17),
+                (3, [], 3, 0),
+                (3, [], 5, 2),
+                (3, [], 1, 2),
+                (0, [0, 0, 0, 0], 0, 0),
+                (3, [0, 0, 0, 0], 3, 6),
+                (0, [1, 2, 3, 4, 5, 6], 7, 7),
+                (7, [6, 5, 4, 3, 2, 1], 0, 7),
+                (1, [10, 2, -1, 7], 4, 31),
+            ]
+            for nadstropje, postanki, cilj, rezultat in podatki:
+                if not Check.equal(f'Dvigalo({nadstropje}, {postanki}).razdalja({cilj})', rezultat):
+                    break
         except TimeoutError:
             Check.error("Dovoljen čas izvajanja presežen")
         except Exception:
@@ -730,46 +659,19 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoyNzQ4MywidXNlciI6MTE1Mzh9:1vzdCS:-oUzPcTTIggYdzvNzbRCouP0ipUknVrpekydVrriT-4"
+        ] = "eyJwYXJ0Ijo0Mjk5NSwidXNlciI6MTE1Mzh9:1wWxxC:zme5GXGpWK7TH7kvdYyRMhGMGg3KITQvf2TSWsnbn8Q"
         try:
-            Check.equal('odstrani_samoglasnike("aeoIcesta")', "cesta")
-            Check.secret(odstrani_samoglasnike("laika"))
-            Check.secret(odstrani_samoglasnike("aeter"))
-        except TimeoutError:
-            Check.error("Dovoljen čas izvajanja presežen")
-        except Exception:
-            Check.error(
-                "Testi sprožijo izjemo\n  {0}",
-                "\n  ".join(traceback.format_exc().split("\n"))[:-2],
-            )
-
-    if Check.part():
-        Check.current_part[
-            "token"
-        ] = "eyJwYXJ0IjoyNzQ4NCwidXNlciI6MTE1Mzh9:1vzdCS:Ar49MQ1-7Dnwuus-u28CET2AyE4REsanWlVhruW9Jvo"
-        try:
-            Check.equal('obrni_oklepaje("((()(3+4)))")', ")))()3+4(((")
-            Check.secret(obrni_oklepaje("1234()"))
-            Check.secret(obrni_oklepaje("1(2(3(4))))))))))"))
-        except TimeoutError:
-            Check.error("Dovoljen čas izvajanja presežen")
-        except Exception:
-            Check.error(
-                "Testi sprožijo izjemo\n  {0}",
-                "\n  ".join(traceback.format_exc().split("\n"))[:-2],
-            )
-
-    if Check.part():
-        Check.current_part[
-            "token"
-        ] = "eyJwYXJ0IjoyNzQ4NSwidXNlciI6MTE1Mzh9:1vzdCS:Ql_v8ln_T-CKk3sxR8_A12r_Siwfj9G2p-8ZWdf17GM"
-        try:
-            Check.equal('prestej_posebno("aa  a ", "a", 2)', 3)
-            Check.equal('prestej_posebno("aa  a ", "a", 3)', 1)
-            Check.secret(prestej_posebno("1234()", "3", 5))
-            Check.secret(prestej_posebno("xyxxx     x x x", "x", 4))
-            Check.secret(prestej_posebno("xyxxx     x x x", "x", 5))
-            Check.secret(prestej_posebno("xyxxx     x x x", "x", 6))
+            podatki = [
+                (3, '[Dvigalo(3, [1, 5, 0, 4]), Dvigalo()]', 1),
+                (0, '[Dvigalo()]', 0),
+                (2, '[Dvigalo(3, [1, 5, 0, 4]), Dvigalo(3, [1, 5, 0, 4]), Dvigalo(3, [1, 5, 0, 4]), Dvigalo(3, [1, 5, 0, 4])]', 0),
+                (2, '[Dvigalo(3, [1, 5, 0, 4]), Dvigalo(0, [1, 2, 3, 4, 5, 6]), Dvigalo(8, [1, 3, 2, 5]), Dvigalo(7, [6, 5, 4, 3, 2, 1])]', 3),
+                (2, '[Dvigalo(3, [1, 5, 0, 4]), Dvigalo(7, [6, 5, 4, 3, 2, 1]), Dvigalo(0, [1, 2, 3, 4, 5, 6]), Dvigalo(8, [1, 3, 2, 5])]', 1),
+                (5, '[Dvigalo(3, [1, 5, 0, 4]), Dvigalo(7, [6, 5, 4, 3, 2, 1]), Dvigalo(0, [1, 2, 3, 4, 5, 6]), Dvigalo(8, [1, 3, 2, 5])]', 2),
+            ]
+            for nadstropje, dvigala, rezultat in podatki:
+                if not Check.equal(f'klic({nadstropje}, {dvigala})', rezultat):
+                    break
         except TimeoutError:
             Check.error("Dovoljen čas izvajanja presežen")
         except Exception:

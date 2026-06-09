@@ -1,185 +1,116 @@
 # =============================================================================
-# Vgrajene metode
-# =====================================================================@027491=
+# Prispevki za piknik
+#
+# Skupina prijateljev se je odločila, da se dobijo na pikniku. Dogovorili so se,
+# da vsak prispeva nekaj stvari, ki jih ima rad. Da bodo lažje vodili evidenco,
+# so v slovar pod imenom vsakega udeleženca zapisali slovar, ki predstavlja
+# prinešeno hrano oziroma pijačo ter število enot. Primer slovarja:
+#
+#     prispevki = {
+#         "Alenka": {"radler": 3, "kajmak": 2},
+#         "Bojan": {"radler": 7, "lepinja": 4, "čevapčiči": 1},
+#         "Cene": {},
+#         "Dani": {"perutničke": 1, "čevapčiči": 3, "lepinja": 5},
+#         "Erik": {"kajmak": 1, "perutničke": 3},
+#         "Francka": {}
+#     }
+# =====================================================================@042997=
 # 1. podnaloga
-# Sestavite funkcijo `prezrcali`, ki vrne prezrcaljen niz.
-# 
-#     >>> prezrcali('abeceda')
-#     'adeceba'
+# Prijatelje zanima, koliko enot posameznih jedi in pijač so zbrali. Sestavi
+# funkcijo `zbrano(prispevki)`, ki sprejme slovar prispevkov udeležencev piknika
+# in vrne slovar, ki za vsako jed ali pijačo pove, koliko enot so zbrali.
+#
+# Primer za slovar `prispevki`:
+#
+#     >>> zbrano(prispevki)
+#     {
+#         "radler": 10,
+#         "lepinja": 9,
+#         "čevapčiči": 4,
+#         "perutničke": 4,
+#         "kajmak": 3
+#     }
 # =============================================================================
-def prezrcali(niz):
-    # if len(niz) < 2:
-    #     return niz
-    # else:
-    #     return niz1[-1] + prezrcali(niz[:-1])
-    return niz[::-1]
-# =====================================================================@027492=
+def zbrano(prispevki):
+    dobrote = []
+    zbrano = {}
+    for oseba in prispevki:
+        for dobrota in prispevki[oseba]:
+            if dobrota not in dobrote:
+                dobrote.append(dobrota)
+    for dobrota in dobrote:
+        zbrano[dobrota] = 0
+        for oseba in prispevki:
+            zbrano[dobrota] += prispevki[oseba].get(dobrota, 0)
+    return zbrano
+
+
+# def zbrano(prispevki):
+# po_sestavinah = {}
+# for prispevek in prispevki.values():
+#     for izdelek, kolicina in prispevek.items():
+#         po_sestavinah[izdelek] = po_sestavinah.get(izdelek, 0) + kolicina
+# return po_sestavinah
+# =====================================================================@042999=
 # 2. podnaloga
-# Sestavite funkcijo `je_palindrom`, ki preveri, če je niz palindrom.
-# 
-#     >>> je_palindrom('kajak')
-#     True
+# Prijatelje zanima, koliko je posameznik prispeval k uspehu piknika. V slovarju
+# so zbrali okvirne cene posameznih jedi in pijač.
+#
+# Primer slovarja s cenami:
+#
+#     cene = {"radler": 1.20, "kajmak": 3.30, "lepinja": 0.70, "perutničke": 5.50, "čevapčiči": 5.30}
+#
+# Sestavi funkcijo `prispevki_oseb(prispevki, cene)`, ki sprejme slovarja prispevkov
+# in cen ter vrne slovar, ki imenom oseb pripiše skupno ceno njihovih prispevkov.
+#
+#     >>> prispevki_oseb(prispevki, cene)
+#     {
+#         "Alenka": 10.2,
+#         "Bojan": 16.5,
+#         "Cene": 0,
+#         "Dani": 24.9,
+#         "Erik": 19.8,
+#         "Francka": 0
+#     }
 # =============================================================================
-def je_palindrom(niz):
-    return niz == prezrcali(niz)
-# =====================================================================@027483=
+def prispevki_oseb(prispevki, cenik):
+    prispevscine = {}
+    for oseba in prispevki.keys():
+        prispevscine[oseba] = 0
+        for dar in prispevki[oseba]:
+            prispevscine[oseba] += prispevki[oseba][dar]*cenik[dar]
+    return prispevscine 
+# =====================================================================@043000=
 # 3. podnaloga
-# Napiši funkcijo `odstrani_samoglasnike`, ki sprejme niz in vrne nov niz brez
-# začetnih samoglasnikov.
-# 
-#     >>> odstrani_samoglasnike("aeoIcesta")
-#     "cesta"
+# Da bodo pikniki v prihodnje bolj pravični, so se odločili, da preverijo dolg
+# vsakega udeleženca. Zanima jih, koliko je prispevek posameznika manjši od pravičnega
+# deleža. Če je, na primer, 5 prijateljev skupaj prineslo za 50 evrov hrane in pijače in
+# je Bojan prinesel le kajmak za 3.3 evre, potem njegov dolg znaša 6.7 evra.
+#
+# Sestavi funkcijo `dolzniki(prispevki, cene)`, ki za dana slovarja prispevkov in cen
+# vrne slovar, ki za vsakega udeleženca zabeleži njegov dolg. Slovar naj ne vsebuje udeležencev,
+# ki ničesar ne dolgujejo.
+#
+# Primer:
+#
+#     >>> dolzniki(prispevki, cene)
+#     {
+#         "Alenka": 1.7,
+#         "Cene": 11.9,
+#         "Francka": 12.9
+#     }
 # =============================================================================
-def odstrani_samoglasnike(niz):
-    if niz[0] not in 'aeiouAEIOU':
-        return niz
-    else:
-       return odstrani_samoglasnike(niz[1:])
-        
-# =====================================================================@027484=
-# 4. podnaloga
-# Sestavite funkcijo `obrni_oklepaje`, ki sprejme niz, ki vsebuje zgolj cela
-# števila, operatorje in oklepaje "(" in ")" ter vrne niz, kjer so vsi oklepaji
-# obrnjeni (znak ")" se pretvori v "(" in obratno).
-# 
-#     >>> obrni_oklepaje("((()(3+4)))")
-#     ")))()3+4((("
-# =============================================================================
-def obrni_oklepaje(niz):
-    return niz.replace('(','X').replace(')','(').replace('X',')') 
-    
-# =====================================================================@027485=
-# 5. podnaloga
-# Sestavite funkcijo `prestej_posebno`, ki sprejme niz, znak `c` in število `k`
-# ter prešteje število presledkov za `k`-to pojavitvijo znaka `c`.
-# 
-#     >>> prestej_posebno("aa  a ", "a", 2)
-#     3
-#     >>> prestej_posebno("aa  a ", "a", 3)
-#     1
-# =============================================================================
-
-def prestej_posebno(niz, znak, pojavitev):
-    st = 0
-
-    for indeks, crka in enumerate(niz):
-        if crka == znak:
-            st += 1
-
-        if st == pojavitev:
-            p = 0
-            for c in niz[indeks + 1:]:
-                if c == ' ':
-                    p += 1
-                else:
-                    break
-            return p
-
-    return 0
-
-    
-    
-        
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+def dolzniki(prispevki, cene):
+    skupaj = 0
+    stevilo_oseb = len(prispevki.keys())
+    for dobrota, kolicina in zbrano(prispevki).items():
+        skupaj += kolicina*cene[dobrota]
+    posteni_prispievek = skupaj/stevilo_oseb
+    dolg = {}
+    for oseba in prispevki.keys():
+        if (posteni_prispievek - prispevki_oseb(prispevki, cene)[oseba]) > 0:
+            dolg[oseba] = (posteni_prispievek - prispevki_oseb(prispevki, cene)[oseba]) 
+    return dolg
 # ============================================================================@
 # fmt: off
 "Če vam Python sporoča, da je v tej vrstici sintaktična napaka,"
@@ -696,12 +627,40 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoyNzQ5MSwidXNlciI6MTE1Mzh9:1vzdCS:Fx9ekk7zOgtEy8nid1HcKbIUyHi3QjAfR6uAseh5DTg"
+        ] = "eyJwYXJ0Ijo0Mjk5NywidXNlciI6MTE1Mzh9:1wWxxC:A9gRHeOUosiFz-WOsBFx8H7om4aJbnDQAtNDy1hxmn8"
         try:
-            Check.equal('prezrcali("x")', 'x')
-            Check.equal('prezrcali("xy")', 'yx')
-            Check.equal('prezrcali("abeceda")', 'adeceba')
-            Check.equal('prezrcali("alisebomartanatramobesila")', 'alisebomartanatramobesila')
+            prispevki1 = {}
+            prispevki2 = {"Cene": {}}
+            prispevki3 = {"Alenka": {"radler": 3}, "Bojan": {"radler": 4}}
+            prispevki4 = {
+                "Alenka": {"radler": 3, "lepinja": 5}, 
+                "Bojan": {"radler": 4}, 
+                "Cilka": {"lepinja": 5, "kajmak": 1}
+            }
+            prispevki5 = {
+                "Alenka": {"radler": 3, "kajmak": 2}, 
+                "Bojan": {"radler": 7, "lepinja": 4, "čevapčiči": 1},
+                "Cene": {},
+                "Dani": {"perutničke": 1, "čevapčiči": 3, "lepinja": 5},
+                "Erik": {"kajmak": 1, "perutničke": 3},
+                "Francka": {}
+            }
+            
+            rezultat = {
+                "radler": 10,
+                "lepinja": 9,
+                "čevapčiči": 4,
+                "perutničke": 4,
+                "kajmak": 3
+            }
+            Check.equal(f'zbrano({prispevki1})', {}) 
+            Check.equal(f'zbrano({prispevki2})', {}) 
+            Check.equal(f'zbrano({prispevki3})', {"radler": 7})
+            Check.equal(
+                f'zbrano({prispevki4})', 
+                {"radler": 7, "lepinja": 10, "kajmak": 1}
+            )
+            Check.equal(f'zbrano({prispevki5})', rezultat)
         except TimeoutError:
             Check.error("Dovoljen čas izvajanja presežen")
         except Exception:
@@ -713,12 +672,54 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoyNzQ5MiwidXNlciI6MTE1Mzh9:1vzdCS:TEp851iNqWTMmAZjvegubZjGakJDTXkZCr2G48IjDqQ"
+        ] = "eyJwYXJ0Ijo0Mjk5OSwidXNlciI6MTE1Mzh9:1wWxxC:Soj0uvm7YdPihYo2PIp0ghbI_WN7mUi2mWHN9waDaCo"
         try:
-            Check.equal('je_palindrom("kajak")', True)
-            Check.equal('je_palindrom("abeceda")', False)
-            Check.equal('je_palindrom("oko")', True)
-            Check.equal('je_palindrom("neradodaren")', True)
+            prispevki1 = {}
+            prispevki2 = {"Cene": {}}
+            prispevki3 = {"Alenka": {"radler": 3}, "Bojan": {"radler": 4}}
+            prispevki4 = {
+                "Alenka": {"radler": 3, "lepinja": 5}, 
+                "Bojan": {"radler": 4}, 
+                "Cilka": {"lepinja": 5, "kajmak": 1}
+            }
+            prispevki5 = {
+                "Alenka": {"radler": 3, "kajmak": 2}, 
+                "Bojan": {"radler": 7, "lepinja": 4, "čevapčiči": 1},
+                "Cene": {},
+                "Dani": {"perutničke": 1, "čevapčiči": 3, "lepinja": 5},
+                "Erik": {"kajmak": 1, "perutničke": 3},
+                "Francka": {}
+            }
+            
+            cene1 = {"radler": 1.20, "kajmak": 3.30, "lepinja": 0.70, "perutničke": 5.50, "čevapčiči": 5.30}
+            cene2 = {"radler": 1.0, "kajmak": 1.0, "lepinja": 1.0, "perutničke": 2.0, "čevapčiči": 2.0}
+            
+            rezultat51 = {
+                "Alenka": 10.2, # 1.2 * 3 + 3.3 * 2 = 3.6 + 6.6 = 10.2
+                "Bojan": 16.5, # 1.2 * 7 + 0.7 * 2 + 5.3 * 1 = 8.4 + 1.4 + 5.3 = 15.1
+                "Cene": 0,
+                "Dani": 24.9, # 5.5 + 5.3 * 3 + 0.7 * 5 = 11.0 + 15.9 + 3.5 = 24.9
+                "Erik": 19.8, # 3.3 * 1 + 5.5 * 3 = 3.3 + 16.5 = 19.8
+                "Francka": 0
+            }
+            rezultat52 = {
+                "Alenka": 5.0,
+                "Bojan": 13.0, # 1.2 * 7 + 0.7 * 2 + 5.3 * 1 = 8.4 + 1.4 + 5.3 = 15.1
+                "Cene": 0,
+                "Dani": 13.0, # 5.5 + 5.3 * 3 + 0.7 * 5 = 11.0 + 15.9 + 3.5 = 24.9
+                "Erik": 7.0, # 3.3 * 1 + 5.5 * 3 = 3.3 + 16.5 = 19.8
+                "Francka": 0
+            }
+            Check.equal(f'prispevki_oseb({prispevki1}, {cene1})', {})
+            Check.equal(f'prispevki_oseb({prispevki2}, {cene1})', {"Cene": 0})
+            Check.equal(f'prispevki_oseb({prispevki3}, {cene1})', {"Alenka": 3.6, "Bojan":4.8})
+            Check.equal(f'prispevki_oseb({prispevki4}, {cene1})', {"Alenka": 7.1, "Bojan": 4.8, "Cilka": 6.8})
+            Check.equal(f'prispevki_oseb({prispevki5}, {cene1})', rezultat51)
+            Check.equal(f'prispevki_oseb({prispevki1}, {cene2})', {})
+            Check.equal(f'prispevki_oseb({prispevki2}, {cene2})', {"Cene": 0})
+            Check.equal(f'prispevki_oseb({prispevki3}, {cene2})', {"Alenka": 3, "Bojan": 4})
+            Check.equal(f'prispevki_oseb({prispevki4}, {cene2})', {"Alenka": 8, "Bojan": 4, "Cilka": 6})
+            Check.equal(f'prispevki_oseb({prispevki5}, {cene2})', rezultat52)
         except TimeoutError:
             Check.error("Dovoljen čas izvajanja presežen")
         except Exception:
@@ -730,46 +731,20 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoyNzQ4MywidXNlciI6MTE1Mzh9:1vzdCS:-oUzPcTTIggYdzvNzbRCouP0ipUknVrpekydVrriT-4"
+        ] = "eyJwYXJ0Ijo0MzAwMCwidXNlciI6MTE1Mzh9:1wWxxC:e7Q8aoqmECFac4APe2dPN6vSsFfFA1zhTizc18Cz8lo"
         try:
-            Check.equal('odstrani_samoglasnike("aeoIcesta")', "cesta")
-            Check.secret(odstrani_samoglasnike("laika"))
-            Check.secret(odstrani_samoglasnike("aeter"))
-        except TimeoutError:
-            Check.error("Dovoljen čas izvajanja presežen")
-        except Exception:
-            Check.error(
-                "Testi sprožijo izjemo\n  {0}",
-                "\n  ".join(traceback.format_exc().split("\n"))[:-2],
-            )
-
-    if Check.part():
-        Check.current_part[
-            "token"
-        ] = "eyJwYXJ0IjoyNzQ4NCwidXNlciI6MTE1Mzh9:1vzdCS:Ar49MQ1-7Dnwuus-u28CET2AyE4REsanWlVhruW9Jvo"
-        try:
-            Check.equal('obrni_oklepaje("((()(3+4)))")', ")))()3+4(((")
-            Check.secret(obrni_oklepaje("1234()"))
-            Check.secret(obrni_oklepaje("1(2(3(4))))))))))"))
-        except TimeoutError:
-            Check.error("Dovoljen čas izvajanja presežen")
-        except Exception:
-            Check.error(
-                "Testi sprožijo izjemo\n  {0}",
-                "\n  ".join(traceback.format_exc().split("\n"))[:-2],
-            )
-
-    if Check.part():
-        Check.current_part[
-            "token"
-        ] = "eyJwYXJ0IjoyNzQ4NSwidXNlciI6MTE1Mzh9:1vzdCS:Ql_v8ln_T-CKk3sxR8_A12r_Siwfj9G2p-8ZWdf17GM"
-        try:
-            Check.equal('prestej_posebno("aa  a ", "a", 2)', 3)
-            Check.equal('prestej_posebno("aa  a ", "a", 3)', 1)
-            Check.secret(prestej_posebno("1234()", "3", 5))
-            Check.secret(prestej_posebno("xyxxx     x x x", "x", 4))
-            Check.secret(prestej_posebno("xyxxx     x x x", "x", 5))
-            Check.secret(prestej_posebno("xyxxx     x x x", "x", 6))
+            rezultat1 = {
+                "Alenka": 1.7,
+                "Cene": 11.9,
+                "Francka": 11.9
+            }
+            
+            Check.equal(f'dolzniki({prispevki2}, {cene1})', {})
+            Check.equal(f'dolzniki({prispevki3}, {cene1})', {"Alenka": 0.6})
+            Check.equal(f'dolzniki({prispevki5}, {cene1})', rezultat1)
+            Check.equal(f'dolzniki({prispevki2}, {cene2})', {})
+            Check.equal(f'dolzniki({prispevki3}, {cene2})', {"Alenka": 0.5})
+            Check.equal(f'dolzniki({prispevki4}, {cene2})', {"Bojan": 2})
         except TimeoutError:
             Check.error("Dovoljen čas izvajanja presežen")
         except Exception:

@@ -1,183 +1,134 @@
 # =============================================================================
-# Vgrajene metode
-# =====================================================================@027491=
+# Potapljanje ladjic
+#
+# Ana in Žiga se igrata potapljanje ladijc, a ker jima je zmanjkalo papirja, si vse informacije o igri beležita v datoteke.
+# =====================================================================@042982=
 # 1. podnaloga
-# Sestavite funkcijo `prezrcali`, ki vrne prezrcaljen niz.
-# 
-#     >>> prezrcali('abeceda')
-#     'adeceba'
+# Postavitev ladjic bosta v datoteko zapisala tako, da bosta v vsako vrstico
+# zapisala informacije o eni ladjici na sledeč način:
+#
+#     vrstica,stolpec,smer,dolzina
+#
+# `vrstica` in `stolpec` določata začetni koordinati, `smer` določa ali je
+# ladjica od teh koordinat postavljena v desno (znak `'>'`) ali navzdol (znak `'v'`). `dolzina`
+# določa dolžino ladjice, tj., koliko koordinat v podani smeri zaseda. Predpostavite lahko, da se ladjice ne prekrivajo.
+#
+# Sestavite funkcijo `preberi_ladjice(vhodna, dimenzija)`, ki iz vhodne datoteke prebere
+# pozicije ladjic in jih predstavi na igralni plošči velikosti `dimenzija`x`dimenzija`.
+# Katerkoli ladjico, ki ni v celoti na igralni plošči (tj. vsaj ena ladjičina koordinata pade čez rob),
+# spustite.
+#
+# Igralno ploščo predstavite s tabelo na sledeč način: če je na dani koordinati ladjica
+# naj bo na tem mestu znak lojtra `'#'`, sicer pa naj bo na tej koordinati presledek `' '`.
 # =============================================================================
-def prezrcali(niz):
-    # if len(niz) < 2:
-    #     return niz
-    # else:
-    #     return niz1[-1] + prezrcali(niz[:-1])
-    return niz[::-1]
-# =====================================================================@027492=
+def preberi_ladjice(vhodna, dimenzija):
+    plosca = [[" " for _ in range(dimenzija)] for _ in range(dimenzija)]
+
+    with open(vhodna) as dat:
+        for vrstica in dat:
+            x, y, smer, dolzina = vrstica.strip().split(",")
+            x = int(x) - 1
+            y = int(y) - 1
+            dolzina = int(dolzina)
+
+            if smer == ">":
+                if y + dolzina > dimenzija:
+                    continue
+
+                for k in range(dolzina):
+                    plosca[x][y + k] = "#"
+
+            elif smer == "v":
+                if x + dolzina > dimenzija:
+                    continue
+
+                for k in range(dolzina):
+                    plosca[x + k][y] = "#"
+
+    return plosca
+
+
+# def preberi_ladjice(vhodna, dimenzija):
+#     plosca = [[' ' for _ in range(dimenzija)] for __ in range(dimenzija)]
+#     with open(vhodna) as f:
+#         for vrstica in f:
+#             vr, st, smer, d = vrstica.strip().split(',')
+#             vr, st, d = int(vr), int(st), int(d)
+#             if vr <= dimenzija and st <= dimenzija:
+#                 if smer == 'v' and vr + d - 1 <= dimenzija:
+#                     for i in range(d):
+#                         plosca[vr + i - 1][st - 1] = '#'
+#                 if smer == '>' and st + d - 1 <= dimenzija:
+#                     for i in range(d):
+#                         plosca[vr - 1][st + i - 1] = '#'
+#     return plosca
+
+
+# =====================================================================@042984=
 # 2. podnaloga
-# Sestavite funkcijo `je_palindrom`, ki preveri, če je niz palindrom.
-# 
-#     >>> je_palindrom('kajak')
-#     True
+# Za lepšo vizalno predstavitev bomo igralno ploščo predstavili na preprostejši način. To bomo storili tako, da vsebino plošče strnemo v niz,
+# okoli pa dodamo še rob. Na primer, ploščo
+#
+#     [[' ', ' ', '#', '#', ' '],
+#      [' ', '#', ' ', ' ', '#'],
+#      [' ', '#', ' ', ' ', '#'],
+#      [' ', '#', ' ', ' ', '#'],
+#      [' ', ' ', ' ', ' ', '#']]
+#
+# bomo vizualizirali kot:
+#
+#     /-----\
+#     |  ## |
+#     | #  #|
+#     | #  #|
+#     | #  #|
+#     |    #|
+#     \-----/
+#
+# Sestavite funkcijo `vizualiziraj(plosca, izhodna)`, ki sprejme opis plošče kot zgoraj in
+# v datoteko `izhodna` zapiše vizualizirano igralno ploščo. Predpostavite lahko, da je igralna
+# plošča kvadratna.
 # =============================================================================
-def je_palindrom(niz):
-    return niz == prezrcali(niz)
-# =====================================================================@027483=
+def vizualiziraj(plosca, izhodna):
+    with open(izhodna, "w") as dat:
+        print("/" + "-" * len(plosca) + "\\", file=dat)
+        for row in plosca:
+            print("|" + "".join(row) + "|", file=dat)
+        print("\\" + "-" * len(plosca) + "/", file=dat)
+
+
+# =====================================================================@042983=
 # 3. podnaloga
-# Napiši funkcijo `odstrani_samoglasnike`, ki sprejme niz in vrne nov niz brez
-# začetnih samoglasnikov.
-# 
-#     >>> odstrani_samoglasnike("aeoIcesta")
-#     "cesta"
+# Na podoben način kot sta zabeležila postavitev ladjic bosta Ana in Žiga zabeležila še strele, tj., v vsako vrstico (druge)
+# datoteke bosta zabeležila koordinate strelov, ločene z vejico. Na primer, strela
+# na koordinati `(3, 5)` in `(2, 1)` bosta v datoteko zapisala kot:
+#
+#     3,5
+#     2,1
+#
+# Sestavite funkcijo `streljaj(streli, plosca, dimenzija)`, ki iz vhodne datoteke
+# `streli` prebere strele, iz datoteke `plosca` in števila `dimenzija` pa postavitev ladjic (kot zgoraj).
+# Funkcija naj spet vrne igralno ploščo kot prej, ki pa jo streli spremenijo na sledeč način:
+# če je strel zadel eno od ladjic na to mesto postavimo `'X'`, če pa je zadel prazno polje
+# na to mesto zapišemo `'.'`. Strele, ki so izven igralne plošče, preskočite.
 # =============================================================================
-def odstrani_samoglasnike(niz):
-    if niz[0] not in 'aeiouAEIOU':
-        return niz
-    else:
-       return odstrani_samoglasnike(niz[1:])
-        
-# =====================================================================@027484=
-# 4. podnaloga
-# Sestavite funkcijo `obrni_oklepaje`, ki sprejme niz, ki vsebuje zgolj cela
-# števila, operatorje in oklepaje "(" in ")" ter vrne niz, kjer so vsi oklepaji
-# obrnjeni (znak ")" se pretvori v "(" in obratno).
-# 
-#     >>> obrni_oklepaje("((()(3+4)))")
-#     ")))()3+4((("
-# =============================================================================
-def obrni_oklepaje(niz):
-    return niz.replace('(','X').replace(')','(').replace('X',')') 
-    
-# =====================================================================@027485=
-# 5. podnaloga
-# Sestavite funkcijo `prestej_posebno`, ki sprejme niz, znak `c` in število `k`
-# ter prešteje število presledkov za `k`-to pojavitvijo znaka `c`.
-# 
-#     >>> prestej_posebno("aa  a ", "a", 2)
-#     3
-#     >>> prestej_posebno("aa  a ", "a", 3)
-#     1
-# =============================================================================
+def streljaj(streli, postavitev_ladjic, dimenzija):
+    plosca = preberi_ladjice(postavitev_ladjic, dimenzija)
 
-def prestej_posebno(niz, znak, pojavitev):
-    st = 0
+    with open(streli) as dat:
+        for strel in dat:
+            x, y = strel.strip().split(",")
+            x, y = int(x)-1, int(y)-1
 
-    for indeks, crka in enumerate(niz):
-        if crka == znak:
-            st += 1
-
-        if st == pojavitev:
-            p = 0
-            for c in niz[indeks + 1:]:
-                if c == ' ':
-                    p += 1
+            if x not in range(dimenzija) or y not in range(dimenzija):
+                pass
+            else:
+                if plosca[x][y] == "#":
+                    plosca[x][y] = "X"
                 else:
-                    break
-            return p
+                    plosca[x][y] = "."
 
-    return 0
-
-    
-    
-        
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    return plosca
 
 
 # ============================================================================@
@@ -696,12 +647,22 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoyNzQ5MSwidXNlciI6MTE1Mzh9:1vzdCS:Fx9ekk7zOgtEy8nid1HcKbIUyHi3QjAfR6uAseh5DTg"
+        ] = "eyJwYXJ0Ijo0Mjk4MiwidXNlciI6MTE1Mzh9:1wWxxC:JhaYsFA36W31aIhhdBbvinjREXL_zJBY-3Age065gvY"
         try:
-            Check.equal('prezrcali("x")', 'x')
-            Check.equal('prezrcali("xy")', 'yx')
-            Check.equal('prezrcali("abeceda")', 'adeceba')
-            Check.equal('prezrcali("alisebomartanatramobesila")', 'alisebomartanatramobesila')
+            tests = [
+                (['3,3,v,3'], 3, [[' ', ' ', ' '], [' ', ' ', ' '], [' ', ' ', ' ']]),
+                (['3,3,v,3', '1,2,>,2'], 3, [[' ', '#', '#'], [' ', ' ', ' '], [' ', ' ', ' ']]),
+                (['3,3,v,3', '1,1,>,2', '1,3,v,3'], 3, [['#', '#', '#'], [' ', ' ', '#'], [' ', ' ', '#']]),
+                (['3,3,v,3', '1,2,>,2'], 5, [[' ', '#', '#', ' ', ' '], [' ', ' ', ' ', ' ', ' '], [' ', ' ', '#', ' ', ' '], [' ', ' ', '#', ' ', ' '], [' ', ' ', '#', ' ', ' ']]),
+                (['1,2,>,2', '3,3,v,3'], 5, [[' ', '#', '#', ' ', ' '], [' ', ' ', ' ', ' ', ' '], [' ', ' ', '#', ' ', ' '], [' ', ' ', '#', ' ', ' '], [' ', ' ', '#', ' ', ' ']]),
+                (['1,2,>,1', '3,3,v,1'], 5, [[' ', '#', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' '], [' ', ' ', '#', ' ', ' '], [' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ']]),
+                (['6,7,>,5', '8,2,v,3'], 5, [[' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ']]),
+                (['2,7,>,5', '8,2,v,3'], 5, [[' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ']]),
+            ]
+            
+            for i, (f_lines, dim, out) in enumerate(tests):
+                with Check.in_file(f'ladjice{i}.txt', f_lines):
+                    Check.equal(f"preberi_ladjice('ladjice{i}.txt', {dim})", out)
         except TimeoutError:
             Check.error("Dovoljen čas izvajanja presežen")
         except Exception:
@@ -713,12 +674,19 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoyNzQ5MiwidXNlciI6MTE1Mzh9:1vzdCS:TEp851iNqWTMmAZjvegubZjGakJDTXkZCr2G48IjDqQ"
+        ] = "eyJwYXJ0Ijo0Mjk4NCwidXNlciI6MTE1Mzh9:1wWxxC:KbLDsfaEfZg2EnOE0gXn2D5eYpJAjMOQt1sL1Jd2u3Y"
         try:
-            Check.equal('je_palindrom("kajak")', True)
-            Check.equal('je_palindrom("abeceda")', False)
-            Check.equal('je_palindrom("oko")', True)
-            Check.equal('je_palindrom("neradodaren")', True)
+            tests = [
+                ([[' ', ' ', ' '], [' ', ' ', ' '], [' ', ' ', ' ']], "/---\\\n|   |\n|   |\n|   |\n\\---/"),
+                ([[' ', '#', '#'], [' ', ' ', ' '], [' ', ' ', ' ']], "/---\\\n| ##|\n|   |\n|   |\n\\---/"), 
+                ([[' ', '#', '#', ' ', ' '], [' ', ' ', ' ', ' ', ' '], [' ', ' ', '#', ' ', ' '], [' ', ' ', '#', ' ', ' '], [' ', ' ', '#', ' ', ' ']], "/-----\\\n| ##  |\n|     |\n|  #  |\n|  #  |\n|  #  |\n\\-----/"),
+                ([[' ']], "/-\\\n| |\n\\-/"),
+                ([[' ', 'X', 'X', ' ', ' '], [' ', ' ', ' ', ' ', '.'], [' ', ' ', '#', ' ', '.'], [' ', ' ', '#', ' ', ' '], ['.', ' ', '#', ' ', ' ']], "/-----\\\n| XX  |\n|    .|\n|  # .|\n|  #  |\n|. #  |\n\\-----/"),
+            ]
+            
+            for i, (plosca, v) in enumerate(tests):
+                vizualiziraj(plosca, f"plosca{i}.txt")
+                Check.out_file(f"plosca{i}.txt", v.split("\n"))
         except TimeoutError:
             Check.error("Dovoljen čas izvajanja presežen")
         except Exception:
@@ -730,46 +698,23 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoyNzQ4MywidXNlciI6MTE1Mzh9:1vzdCS:-oUzPcTTIggYdzvNzbRCouP0ipUknVrpekydVrriT-4"
+        ] = "eyJwYXJ0Ijo0Mjk4MywidXNlciI6MTE1Mzh9:1wWxxC:QlvLYrlAUJWAET1dyDa53AfHUwthYFI4lsiVOt2gwrA"
         try:
-            Check.equal('odstrani_samoglasnike("aeoIcesta")', "cesta")
-            Check.secret(odstrani_samoglasnike("laika"))
-            Check.secret(odstrani_samoglasnike("aeter"))
-        except TimeoutError:
-            Check.error("Dovoljen čas izvajanja presežen")
-        except Exception:
-            Check.error(
-                "Testi sprožijo izjemo\n  {0}",
-                "\n  ".join(traceback.format_exc().split("\n"))[:-2],
-            )
-
-    if Check.part():
-        Check.current_part[
-            "token"
-        ] = "eyJwYXJ0IjoyNzQ4NCwidXNlciI6MTE1Mzh9:1vzdCS:Ar49MQ1-7Dnwuus-u28CET2AyE4REsanWlVhruW9Jvo"
-        try:
-            Check.equal('obrni_oklepaje("((()(3+4)))")', ")))()3+4(((")
-            Check.secret(obrni_oklepaje("1234()"))
-            Check.secret(obrni_oklepaje("1(2(3(4))))))))))"))
-        except TimeoutError:
-            Check.error("Dovoljen čas izvajanja presežen")
-        except Exception:
-            Check.error(
-                "Testi sprožijo izjemo\n  {0}",
-                "\n  ".join(traceback.format_exc().split("\n"))[:-2],
-            )
-
-    if Check.part():
-        Check.current_part[
-            "token"
-        ] = "eyJwYXJ0IjoyNzQ4NSwidXNlciI6MTE1Mzh9:1vzdCS:Ql_v8ln_T-CKk3sxR8_A12r_Siwfj9G2p-8ZWdf17GM"
-        try:
-            Check.equal('prestej_posebno("aa  a ", "a", 2)', 3)
-            Check.equal('prestej_posebno("aa  a ", "a", 3)', 1)
-            Check.secret(prestej_posebno("1234()", "3", 5))
-            Check.secret(prestej_posebno("xyxxx     x x x", "x", 4))
-            Check.secret(prestej_posebno("xyxxx     x x x", "x", 5))
-            Check.secret(prestej_posebno("xyxxx     x x x", "x", 6))
+            tests = [
+                (['5,5'], ['3,3,v,3'], 3, [[' ', ' ', ' '], [' ', ' ', ' '], [' ', ' ', ' ']]),
+                (['5,2', '2,5'], ['3,3,v,3'], 3, [[' ', ' ', ' '], [' ', ' ', ' '], [' ', ' ', ' ']]),
+                (['1,1', '3,3', '5,5'], ['3,3,v,3'], 3, [['.', ' ', ' '], [' ', ' ', ' '], [' ', ' ', '.']]),
+                (['3,3', '3,4'], ['3,3,v,3', '1,2,>,2'], 3, [[' ', '#', '#'], [' ', ' ', ' '], [' ', ' ', '.']]),
+                (['1,2', '1,3'], ['3,3,v,3', '1,2,>,2'], 3, [[' ', 'X', 'X'], [' ', ' ', ' '], [' ', ' ', ' ']]),
+                (['3,3', '3,4', '3,5'], ['3,3,v,3', '1,2,>,2'], 5, [[' ', '#', '#', ' ', ' '], [' ', ' ', ' ', ' ', ' '], [' ', ' ', 'X', '.', '.'], [' ', ' ', '#', ' ', ' '], [' ', ' ', '#', ' ', ' ']]),
+                (['3,3', '4,3', '5,3'], ['3,3,v,3', '1,2,>,2'], 5, [[' ', '#', '#', ' ', ' '], [' ', ' ', ' ', ' ', ' '], [' ', ' ', 'X', ' ', ' '], [' ', ' ', 'X', ' ', ' '], [' ', ' ', 'X', ' ', ' ']]),
+                (['1,2', '1,3', '2,5', '3,5', '5,1'], ['3,3,v,3', '1,2,>,2'], 5, [[' ', 'X', 'X', ' ', ' '], [' ', ' ', ' ', ' ', '.'], [' ', ' ', '#', ' ', '.'], [' ', ' ', '#', ' ', ' '], ['.', ' ', '#', ' ', ' ']]),
+                    
+            ]
+            
+            for i, (streli_lines, plosca_lines, dim, out) in enumerate(tests):
+                with Check.in_file(f'streli{i}.txt', streli_lines), Check.in_file(f'ladje{i}.txt', plosca_lines):
+                    Check.equal(f"streljaj('streli{i}.txt', 'ladje{i}.txt', {dim})", out)
         except TimeoutError:
             Check.error("Dovoljen čas izvajanja presežen")
         except Exception:

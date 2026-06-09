@@ -1,86 +1,97 @@
 # =============================================================================
-# Vgrajene metode
-# =====================================================================@027491=
+# Klepet
+#
+# Naš priljubljeni program za klepet Skajp se je pred kratkim zaprl, a smo pred tem uspeli ohraniti vse pogovore, ki jih zapišemo v sledeči obliki:
+# 
+#     {
+#         'naslov': 'Kam gremo jest?',
+#         'sporocila': [('Tea', 'jaz bi šla v menzo :thumbsup:'), ('Aljaž', 'meni v menzi ne diši, a bi šli raje v Hombre?'), ('Martin': 'meni je vseeno, zmente se')]
+#     }
+# 
+# Vsak pogovor je torej shranjen v slovarju, ki vsebuje naslov in spročila, ki jih zapišemo v seznamu parov oblike `(oseba, besedilo)` (informacij o času sporočil žal nimamo).
+# 
+# V primerih v nalogah bodo uporabljeni sledeči pogovori:
+# 
+#     pogovor1 = {
+#         'naslov': 'Kam gremo jest?',
+#         'sporocila': [('Tea', 'jaz bi šla v menzo :thumbsup:'), ('Aljaž', 'meni v menzi ne diši, a bi šli raje v Hombre?'), ('Martin', 'meni je vseeno, zmente se')]
+#     }
+#     pogovor2 = {
+#         'naslov': 'Živjo svet',
+#         'sporocila': [('Aljaž', 'a je še kdo tu?'), ('Aljaž', 'izgleda sem sam... :cry:')]
+#     }
+#     pogovor3 = {
+#         'naslov': 'Projektna dokumentacija',
+#         'sporocila': [('Tea', 'spet je treba dopisat dokumentacijo'), ('Martin', 'vem, bom jutri'), ('Tea', 'a si že? zdaj se pa res že mudi'), ('Martin', 'vem, bom jutri'), ('Tea', 'daj no...')]
+#     }
+# =====================================================================@042963=
 # 1. podnaloga
-# Sestavite funkcijo `prezrcali`, ki vrne prezrcaljen niz.
+# Za potrebe arhiviranja bomo pogovor še nekoliko stisnili. Sestavite funkcijo
+# `stisni`, ki prejme pogovor kot zgoraj in ga vrne stisnjeno obliko: 
+# trojico oblike `(naslov, stevilo_sodelujocih, stevilo_sporocil)`.
 # 
-#     >>> prezrcali('abeceda')
-#     'adeceba'
+# Primer uporabe:
+# 
+#     >>> stisni(pogovor1)
+#     ('Kam gremo jest?', 3, 3)
+#     >>> stisni(pogovor2)
+#     ('Živjo svet', 1, 2)
 # =============================================================================
-def prezrcali(niz):
-    # if len(niz) < 2:
-    #     return niz
-    # else:
-    #     return niz1[-1] + prezrcali(niz[:-1])
-    return niz[::-1]
-# =====================================================================@027492=
+def stisni(pogovor):
+    naslov = pogovor['naslov']
+    stevilo_sporocil = len(pogovor['sporocila'])
+    sodelujoci = []
+    for sporocilo in pogovor['sporocila']:
+        if sporocilo[0] in sodelujoci:
+            pass
+        else:
+            sodelujoci.append(sporocilo[0])
+    return (naslov, len(sodelujoci), stevilo_sporocil)
+
+# =====================================================================@042961=
 # 2. podnaloga
-# Sestavite funkcijo `je_palindrom`, ki preveri, če je niz palindrom.
+# Sestavite funkcijo `klepetulja`, ki sprejme seznam pogovorov (opisanih kot zgoraj),
+# in vrne osebo, ki je v vseh vseh pogovorih poslala največ sporočil. Če je takih oseb več,
+# naj metoda vrne eno izmed njih.
 # 
-#     >>> je_palindrom('kajak')
-#     True
+# Primer uporabe:
+# 
+#     >>> klepetulja([pogovor1, pogovor2])
+#     'Aljaž'
+#     >>> klepetulja([pogovor1, pogovor3])
+#     'Tea'
 # =============================================================================
-def je_palindrom(niz):
-    return niz == prezrcali(niz)
-# =====================================================================@027483=
+def klepetulja(seznam_pogovorov):
+    sporocila = []
+    slovar = {}
+    for pogovor in seznam_pogovorov:
+        for message in pogovor['sporocila']:
+            sporocila.append(message[0])
+    for oseba in sporocila:
+        slovar[sporocila.count(oseba)] = oseba
+    return slovar[max(list(slovar.keys()))]
+    
+# =====================================================================@042962=
 # 3. podnaloga
-# Napiši funkcijo `odstrani_samoglasnike`, ki sprejme niz in vrne nov niz brez
-# začetnih samoglasnikov.
+# Opazimo, da so pri izvozu podatkov vsi čustvenčki postali besedilo oblike `:custvencek:`; v zgornjih primerih opazimo `:thumbsup:` in `:cry:`.
+# Za definicijo čustvenčka bomo zahtevali, da se začne in konča z `:` vmes pa so lahko le male črke angleške abecede.
+# Sestavite funkcijo `custvencki`, sprejme seznam pogovorov in vrne **množico** vseh čustvenčkov, ki se v pogovorih pojavijo.
 # 
-#     >>> odstrani_samoglasnike("aeoIcesta")
-#     "cesta"
-# =============================================================================
-def odstrani_samoglasnike(niz):
-    if niz[0] not in 'aeiouAEIOU':
-        return niz
-    else:
-       return odstrani_samoglasnike(niz[1:])
-        
-# =====================================================================@027484=
-# 4. podnaloga
-# Sestavite funkcijo `obrni_oklepaje`, ki sprejme niz, ki vsebuje zgolj cela
-# števila, operatorje in oklepaje "(" in ")" ter vrne niz, kjer so vsi oklepaji
-# obrnjeni (znak ")" se pretvori v "(" in obratno).
+# Primer uporabe:
 # 
-#     >>> obrni_oklepaje("((()(3+4)))")
-#     ")))()3+4((("
+#     >>> custvencki([pogovor1, pogovor2])
+#     {':thumbsup:', ':cry:'}
+#     >>> custvencki([pogovor3])
+#     set()
 # =============================================================================
-def obrni_oklepaje(niz):
-    return niz.replace('(','X').replace(')','(').replace('X',')') 
-    
-# =====================================================================@027485=
-# 5. podnaloga
-# Sestavite funkcijo `prestej_posebno`, ki sprejme niz, znak `c` in število `k`
-# ter prešteje število presledkov za `k`-to pojavitvijo znaka `c`.
-# 
-#     >>> prestej_posebno("aa  a ", "a", 2)
-#     3
-#     >>> prestej_posebno("aa  a ", "a", 3)
-#     1
-# =============================================================================
-
-def prestej_posebno(niz, znak, pojavitev):
-    st = 0
-
-    for indeks, crka in enumerate(niz):
-        if crka == znak:
-            st += 1
-
-        if st == pojavitev:
-            p = 0
-            for c in niz[indeks + 1:]:
-                if c == ' ':
-                    p += 1
-                else:
-                    break
-            return p
-
-    return 0
-
-    
-    
-        
-
+import re
+def custvencki(seznam_pogovorov):
+    A = {}
+    vzorec = r':[a-z]*?:'
+    besedilo = ''
+    for pogovor in seznam_pogovorov:
+        besedilo += str(pogovor['sporocila'])
+    return set(re.findall(vzorec, besedilo))
 
 
 
@@ -696,12 +707,24 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoyNzQ5MSwidXNlciI6MTE1Mzh9:1vzdCS:Fx9ekk7zOgtEy8nid1HcKbIUyHi3QjAfR6uAseh5DTg"
+        ] = "eyJwYXJ0Ijo0Mjk2MywidXNlciI6MTE1Mzh9:1wWf1A:XvUbA3-gJJmRZWyha6V0d22memH2OoCZbY758ILs8UQ"
         try:
-            Check.equal('prezrcali("x")', 'x')
-            Check.equal('prezrcali("xy")', 'yx')
-            Check.equal('prezrcali("abeceda")', 'adeceba')
-            Check.equal('prezrcali("alisebomartanatramobesila")', 'alisebomartanatramobesila')
+            pogovor1 = {
+                'naslov': 'Kam gremo jest?',
+                'sporocila': [('Tea', 'jaz bi šla v menzo :thumbsup:'), ('Aljaž', 'meni v menzi ne diši, a bi šlo raje v Hombre?'), ('Martin', 'meni je vseeno, zmente se')]
+            }
+            pogovor2 = {
+                'naslov': 'Živjo svet',
+                'sporocila': [('Aljaž', 'a je še kdo tu?'), ('Aljaž', 'izgleda sem sam... :cry:')]
+            }
+            pogovor3 = {
+                'naslov': 'Projektna dokumentacija',
+                'sporocila': [('Tea', 'spet je treba dopisat dokumentacijo'), ('Martin', 'vem, bom jutri'), ('Tea', 'a si že? zdaj se pa res že mudi'), ('Martin', 'vem, bom jutri'), ('Tea', 'daj no...')]
+            }
+            
+            Check.equal("stisni(pogovor1)", ('Kam gremo jest?', 3, 3), env={'pogovor1': pogovor1})
+            Check.equal("stisni(pogovor2)", ('Živjo svet', 1, 2), env={'pogovor2': pogovor2})
+            Check.equal("stisni(pogovor3)", ('Projektna dokumentacija', 2, 5), env={'pogovor3': pogovor3})
         except TimeoutError:
             Check.error("Dovoljen čas izvajanja presežen")
         except Exception:
@@ -713,12 +736,24 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoyNzQ5MiwidXNlciI6MTE1Mzh9:1vzdCS:TEp851iNqWTMmAZjvegubZjGakJDTXkZCr2G48IjDqQ"
+        ] = "eyJwYXJ0Ijo0Mjk2MSwidXNlciI6MTE1Mzh9:1wWf1A:Ffzb3VESKqI7jTSVb-z33iRDDYBNGAJVRUe9wuTMmeg"
         try:
-            Check.equal('je_palindrom("kajak")', True)
-            Check.equal('je_palindrom("abeceda")', False)
-            Check.equal('je_palindrom("oko")', True)
-            Check.equal('je_palindrom("neradodaren")', True)
+            pogovor1 = {
+                'naslov': 'Kam gremo jest?',
+                'sporocila': [('Tea', 'jaz bi šla v menzo :thumbsup:'), ('Aljaž', 'meni v menzi ne diši, a bi šlo raje v Hombre?'), ('Martin', 'meni je vseeno, zmente se')]
+            }
+            pogovor2 = {
+                'naslov': 'Živjo svet',
+                'sporocila': [('Aljaž', 'a je še kdo tu?'), ('Aljaž', 'izgleda sem sam... :cry:')]
+            }
+            pogovor3 = {
+                'naslov': 'Projektna dokumentacija',
+                'sporocila': [('Tea', 'spet je treba dopisat dokumentacijo'), ('Martin', 'vem, bom jutri'), ('Tea', 'a si že? zdaj se pa res že mudi'), ('Martin', 'vem, bom jutri'), ('Tea', 'daj no...')]
+            }
+            
+            Check.equal("klepetulja([pogovor1, pogovor2])", 'Aljaž', env={'pogovor1': pogovor1, 'pogovor2': pogovor2})
+            Check.equal("klepetulja([pogovor1, pogovor3])", 'Tea', env={'pogovor1': pogovor1, 'pogovor3': pogovor3})
+            Check.equal("klepetulja([pogovor2, pogovor3])", 'Tea', env={'pogovor2': pogovor2, 'pogovor3': pogovor3})
         except TimeoutError:
             Check.error("Dovoljen čas izvajanja presežen")
         except Exception:
@@ -730,46 +765,25 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoyNzQ4MywidXNlciI6MTE1Mzh9:1vzdCS:-oUzPcTTIggYdzvNzbRCouP0ipUknVrpekydVrriT-4"
+        ] = "eyJwYXJ0Ijo0Mjk2MiwidXNlciI6MTE1Mzh9:1wWf1A:FLiW2f1NbN9QEzfJsqquW1Hhs98NUgWQOrx5NE-JOoY"
         try:
-            Check.equal('odstrani_samoglasnike("aeoIcesta")', "cesta")
-            Check.secret(odstrani_samoglasnike("laika"))
-            Check.secret(odstrani_samoglasnike("aeter"))
-        except TimeoutError:
-            Check.error("Dovoljen čas izvajanja presežen")
-        except Exception:
-            Check.error(
-                "Testi sprožijo izjemo\n  {0}",
-                "\n  ".join(traceback.format_exc().split("\n"))[:-2],
-            )
-
-    if Check.part():
-        Check.current_part[
-            "token"
-        ] = "eyJwYXJ0IjoyNzQ4NCwidXNlciI6MTE1Mzh9:1vzdCS:Ar49MQ1-7Dnwuus-u28CET2AyE4REsanWlVhruW9Jvo"
-        try:
-            Check.equal('obrni_oklepaje("((()(3+4)))")', ")))()3+4(((")
-            Check.secret(obrni_oklepaje("1234()"))
-            Check.secret(obrni_oklepaje("1(2(3(4))))))))))"))
-        except TimeoutError:
-            Check.error("Dovoljen čas izvajanja presežen")
-        except Exception:
-            Check.error(
-                "Testi sprožijo izjemo\n  {0}",
-                "\n  ".join(traceback.format_exc().split("\n"))[:-2],
-            )
-
-    if Check.part():
-        Check.current_part[
-            "token"
-        ] = "eyJwYXJ0IjoyNzQ4NSwidXNlciI6MTE1Mzh9:1vzdCS:Ql_v8ln_T-CKk3sxR8_A12r_Siwfj9G2p-8ZWdf17GM"
-        try:
-            Check.equal('prestej_posebno("aa  a ", "a", 2)', 3)
-            Check.equal('prestej_posebno("aa  a ", "a", 3)', 1)
-            Check.secret(prestej_posebno("1234()", "3", 5))
-            Check.secret(prestej_posebno("xyxxx     x x x", "x", 4))
-            Check.secret(prestej_posebno("xyxxx     x x x", "x", 5))
-            Check.secret(prestej_posebno("xyxxx     x x x", "x", 6))
+            pogovor1 = {
+                'naslov': 'Kam gremo jest?',
+                'sporocila': [('Tea', 'jaz bi šla v menzo :thumbsup:'), ('Aljaž', 'meni v menzi ne diši, a bi šlo raje v Hombre?'), ('Martin', 'meni je vseeno, zmente se')]
+            }
+            pogovor2 = {
+                'naslov': 'Živjo svet',
+                'sporocila': [('Aljaž', 'a je še kdo tu?'), ('Aljaž', 'izgleda sem sam... :cry:')]
+            }
+            pogovor3 = {
+                'naslov': 'Projektna dokumentacija',
+                'sporocila': [('Tea', 'spet je treba dopisat dokumentacijo'), ('Martin', 'vem, bom jutri'), ('Tea', 'a si že? zdaj se pa res že mudi'), ('Martin', 'vem, bom jutri'), ('Tea', 'daj no...')]
+            }
+            
+            Check.equal("custvencki([pogovor1, pogovor2])", {':thumbsup:', ':cry:'}, env={'pogovor1': pogovor1, 'pogovor2': pogovor2})
+            Check.equal("custvencki([pogovor1, pogovor3])", {':thumbsup:'}, env={'pogovor1': pogovor1, 'pogovor3': pogovor3})
+            Check.equal("custvencki([pogovor2, pogovor3])", {':cry:'}, env={'pogovor2': pogovor2, 'pogovor3': pogovor3})
+            Check.equal("custvencki([pogovor3])", set(), env={'pogovor2': pogovor2, 'pogovor3': pogovor3})
         except TimeoutError:
             Check.error("Dovoljen čas izvajanja presežen")
         except Exception:

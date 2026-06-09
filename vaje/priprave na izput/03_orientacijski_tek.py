@@ -1,183 +1,129 @@
 # =============================================================================
-# Vgrajene metode
-# =====================================================================@027491=
+# Orientacijski tek
+#
+# Na tekmovanju v orientacijskem teku imajo na voljo več tras za različne kategorije.
+# Ker si kategorije lahko delijo nekatere kontrolne točke, progo posamezne kategorije
+# označijo z zaporedjem oznak kontrolnih točk, na primer
+#
+#     proga1 = ["START", "A", "B", "E", "CILJ"]
+#     proga2 = ["START", "A", "C", "D", "E", "CILJ"]
+#
+#
+# Sistem za čipiranje si zapisuje čas prihoda na posamezne kontrolne točke
+# glede na začetek tekmovanja.
+#
+# Tek tekmovalca je predstavljen s seznamom oblike `(točka, čas)`. Seznam
+#
+#     [("START", 16), ("A", 19), ("B", 22), ("E", 25), ("CILJ", 26)]
+#
+# predstavlja tek, kjer je tekmovalec startal 16 minut po začetku tekmovanja,
+# po treh minutah našel točko `A` in tekmovanje zaključil v 10 minutah.
+# =====================================================================@043026=
 # 1. podnaloga
-# Sestavite funkcijo `prezrcali`, ki vrne prezrcaljen niz.
-# 
-#     >>> prezrcali('abeceda')
-#     'adeceba'
-# =============================================================================
-def prezrcali(niz):
-    # if len(niz) < 2:
-    #     return niz
-    # else:
-    #     return niz1[-1] + prezrcali(niz[:-1])
-    return niz[::-1]
-# =====================================================================@027492=
-# 2. podnaloga
-# Sestavite funkcijo `je_palindrom`, ki preveri, če je niz palindrom.
-# 
-#     >>> je_palindrom('kajak')
+# Tekmovalčev tek je veljaven, če je podano veljavno zaporedje točk:
+#
+# * začne se s točko `START` in konča s točko `CILJ`,
+# * vsebuje vse točke, ki spadajo v tekmovalčevo progo,
+# * vse točke, ki spadajo v tekmovalčevo progo nastopajo v pravilnem zaporedju.
+# (npr. če je določeno zaporedje točk na progi `ABE`, sta `AEB` in `AEBE` neveljavni zaporedji)
+#
+# Morebitne točke, ki niso del trase se ignorirajo in ne vplivajo na veljavnost teka.
+#
+# Napiši funkcijo `je_veljaven(tek, proga)`, ki sprejme podatke o teku ter zaporedje točk
+# na progi in preveri, če je tekmovalčev tek veljaven.
+#
+# Primeri:
+#
+#     >>> je_veljaven([("START", 0), ("A", 5), ("B", 6), ("E", 10), ("CILJ", 11)], proga1)
 #     True
+#     >>> je_veljaven([("START", 0), ("A", 5), ("B", 6), ("C", 9), ("E", 10), ("CILJ", 11)], proga1)
+#     True
+#     >>> je_veljaven([("START", 0), ("E", 3), ("A", 5), ("B", 6), ("CILJ", 11)], proga1)
+#     False
+#     >>> je_veljaven([("START", 0), ("A", 5), ("B", 6), ("CILJ", 11)], proga1)
+#     False
 # =============================================================================
-def je_palindrom(niz):
-    return niz == prezrcali(niz)
-# =====================================================================@027483=
+proga1 = ["START", "A", "B", "E", "CILJ"]
+proga2 = ["START", "A", "C", "D", "E", "CILJ"]
+
+
+def je_veljaven(seznam, proga):
+    i = True
+    hirikiri = []
+    for y in range(len(seznam)):
+        hirikiri.append(seznam[y][0])
+    for y, vnos in enumerate(hirikiri):
+        if vnos not in proga:
+            hirikiri.pop(y)
+    return hirikiri == proga
+
+
+# =====================================================================@043027=
+# 2. podnaloga
+# Napiši funkcijo `zmagovalec(tekmovalci, proga)`, ki poišče indeks zmagovalca
+# v seznamu tekov vseh tekmovalcev v kategoriji. Zmagovalec je tekmovalec, ki je
+# uspešno našel vse kontrolne točke svoje proge v najkrajšem času od svojega
+# začetka (čas na točki `START`).
+#
+# Za tabelo:
+#
+#     tekmovalci = [
+#         [("START", 0), ("A", 5), ("B", 6), ("E", 10), ("CILJ", 11)],
+#         [("START", 2), ("A", 4), ("B", 6), ("E", 7), ("CILJ", 11)],
+#         [("START", 4), ("A", 9), ("B", 10), ("E", 14), ("CILJ", 16)],
+#         [("START", 6), ("B", 11), ("E", 12), ("CILJ", 14)],
+#         [("START", 8), ("A", 13), ("G", 17), ("B", 19), ("E", 23), ("CILJ", 27)],
+#     ]
+#
+# in progo `proga1` iz primera, je zmagovalec tekmovalec z zaporedno
+# številko 1, ki je s progo opravil v 9 minutah.
+# Tekmovalec s številko 3 je sicer na cilj prišel hitreje, a je zgrešil točko "A",
+# zato njegov tek ni veljaven.
+# =============================================================================
+
+
+def zmagovalec(tekmovalci, proga):
+    rezultati = []
+
+    for index, tekmovalec in enumerate(tekmovalci):
+        if je_veljaven(tekmovalec, proga):
+            rezultati.append(tekmovalec[-1][1] - tekmovalec[0][1])
+        else:
+            rezultati.append(999999)
+    return rezultati.index(min(rezultati))
+
+
+# =====================================================================@044332=
 # 3. podnaloga
-# Napiši funkcijo `odstrani_samoglasnike`, ki sprejme niz in vrne nov niz brez
-# začetnih samoglasnikov.
-# 
-#     >>> odstrani_samoglasnike("aeoIcesta")
-#     "cesta"
+# Napiši funkcijo `izpisi(tek, proga, datoteka)`, ki v datoteko zapiše poročilo
+# tekmovalčevega teka. Vsaka vrstica naj vsebuje oznako kontrolne točke, čas
+# od začetka tekmovalčevega teka ter čas od predhodne kontrolne točke, kot kaže
+# primer. Če tekmovalčev tek ni veljaven, naj se v datoteko
+# zapiše le niz `DQ` (disqualified).
+#
+# Za tek `[("START", 2), ("A", 4), ("B", 6), ("E", 7), ("CILJ", 11)]` in progo
+# `proga1`, naj bo datoteka:
+#
+#     START:    0    0
+#     A:    2    2
+#     B:    4    2
+#     E:    5    1
+#     CILJ:    9    4
+#
+# Posamezne vrednosti v vrstici naj bodo med seboj ločene s 4 presledki.
 # =============================================================================
-def odstrani_samoglasnike(niz):
-    if niz[0] not in 'aeiouAEIOU':
-        return niz
-    else:
-       return odstrani_samoglasnike(niz[1:])
-        
-# =====================================================================@027484=
-# 4. podnaloga
-# Sestavite funkcijo `obrni_oklepaje`, ki sprejme niz, ki vsebuje zgolj cela
-# števila, operatorje in oklepaje "(" in ")" ter vrne niz, kjer so vsi oklepaji
-# obrnjeni (znak ")" se pretvori v "(" in obratno).
-# 
-#     >>> obrni_oklepaje("((()(3+4)))")
-#     ")))()3+4((("
-# =============================================================================
-def obrni_oklepaje(niz):
-    return niz.replace('(','X').replace(')','(').replace('X',')') 
-    
-# =====================================================================@027485=
-# 5. podnaloga
-# Sestavite funkcijo `prestej_posebno`, ki sprejme niz, znak `c` in število `k`
-# ter prešteje število presledkov za `k`-to pojavitvijo znaka `c`.
-# 
-#     >>> prestej_posebno("aa  a ", "a", 2)
-#     3
-#     >>> prestej_posebno("aa  a ", "a", 3)
-#     1
-# =============================================================================
-
-def prestej_posebno(niz, znak, pojavitev):
-    st = 0
-
-    for indeks, crka in enumerate(niz):
-        if crka == znak:
-            st += 1
-
-        if st == pojavitev:
-            p = 0
-            for c in niz[indeks + 1:]:
-                if c == ' ':
-                    p += 1
-                else:
-                    break
-            return p
-
-    return 0
-
-    
-    
-        
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+def izpisi(tek, proga, datoteka):
+    with open(datoteka, "w", encoding="utf-8") as dat:
+        if not je_veljaven(tek, proga):
+            print("DQ", file=dat)
+        else:
+            for index, tocka in enumerate(tek):
+                print(
+                    tocka[0] + ":",
+                    "   " + str(tocka[1] - tek[0][1]),
+                    "   " + str(tocka[1] - tek[index - 1][1] if index != 0 else 0),
+                    file=dat,
+                )
 
 
 # ============================================================================@
@@ -696,12 +642,35 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoyNzQ5MSwidXNlciI6MTE1Mzh9:1vzdCS:Fx9ekk7zOgtEy8nid1HcKbIUyHi3QjAfR6uAseh5DTg"
+        ] = "eyJwYXJ0Ijo0MzAyNiwidXNlciI6MTE1Mzh9:1wVtMH:SOx2IsnthgiD16vySavCrlY8W2-pNB6063oPClKrwI0"
         try:
-            Check.equal('prezrcali("x")', 'x')
-            Check.equal('prezrcali("xy")', 'yx')
-            Check.equal('prezrcali("abeceda")', 'adeceba')
-            Check.equal('prezrcali("alisebomartanatramobesila")', 'alisebomartanatramobesila')
+            proga1 = ["START", "A", "B", "E", "CILJ"]
+            proga2 = ["START", "A", "C", "D", "E", "CILJ"]
+            tek1 = [("START", 0), ("A", 5), ("B", 6), ("E", 10), ("CILJ", 11)] # True
+            tek2 = [("START", 0), ("G", 3), ("A", 5), ("B", 6), ("E", 10), ("CILJ", 11)]   # True
+            tek3 = [("START", 0), ("E", 3), ("A", 5), ("B", 6), ("CILJ", 11)]  # False
+            tek4 = [("START", 0), ("G", 3), ("A", 5), ("B", 6), ("CILJ", 11)]  # False
+            tek5 = [("START", 5), ("A", 7), ("C", 12), ("D", 15), ("E", 18), ("CILJ", 22)]
+            tek6 = [("START", 5), ("E", 2), ("A", 7), ("C", 12), ("D", 15), ("E", 18), ("CILJ", 22)]
+            tek7 = [("START", 5), ("A", 7), ("B", 8), ("C", 12), ("D", 15), ("E", 18), ("CILJ", 22)]
+            tek8 = [("A", 7), ("B", 8), ("C", 12), ("D", 15), ("E", 18), ("CILJ", 22)]
+            tek9 = [("START", 5), ("A", 7), ("B", 8), ("C", 12), ("D", 15), ("E", 18)]
+            tek10 = [("B", 8), ("C", 12), ("D", 15), ("E", 18)]
+            tek11 = [("START", 0), ("A", 5), ("B", 6), ("E", 10), ("G", 11), ("CILJ", 12)]
+            
+            
+            Check.equal(f'je_veljaven({tek1}, {proga1})', True)
+            Check.equal(f'je_veljaven({tek2}, {proga1})', True)
+            Check.equal(f'je_veljaven({tek3}, {proga1})', False)
+            Check.equal(f'je_veljaven({tek4}, {proga1})', False)
+            Check.equal(f'je_veljaven({tek5}, {proga1})', False)
+            Check.equal(f'je_veljaven({tek5}, {proga2})', True)
+            Check.equal(f'je_veljaven({tek6}, {proga2})', False)
+            Check.equal(f'je_veljaven({tek7}, {proga2})', True)
+            Check.equal(f'je_veljaven({tek8}, {proga2})', False)
+            Check.equal(f'je_veljaven({tek9}, {proga2})', False)
+            Check.equal(f'je_veljaven({tek10}, {proga2})', False)
+            Check.equal(f'je_veljaven({tek11}, {proga1})', True)
         except TimeoutError:
             Check.error("Dovoljen čas izvajanja presežen")
         except Exception:
@@ -713,12 +682,56 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoyNzQ5MiwidXNlciI6MTE1Mzh9:1vzdCS:TEp851iNqWTMmAZjvegubZjGakJDTXkZCr2G48IjDqQ"
+        ] = "eyJwYXJ0Ijo0MzAyNywidXNlciI6MTE1Mzh9:1wVtMH:DMhSOlPS3qa06Oi6P7vaEegqJISS0tfZerSQ7pVWJeE"
         try:
-            Check.equal('je_palindrom("kajak")', True)
-            Check.equal('je_palindrom("abeceda")', False)
-            Check.equal('je_palindrom("oko")', True)
-            Check.equal('je_palindrom("neradodaren")', True)
+            proga1 = ["START", "A", "B", "E", "CILJ"]
+            tekmovalci1 = [
+                [("START", 0), ("A", 5), ("B", 6), ("E", 10), ("CILJ", 11)],
+                [("START", 2), ("A", 4), ("B", 6), ("E", 7), ("CILJ", 11)],
+                [("START", 4), ("A", 9), ("B", 10), ("E", 14), ("CILJ", 16)],
+                [("START", 6), ("B", 11), ("E", 12), ("CILJ", 14)],
+                [("START", 8), ("A", 13), ("G", 17), ("B", 19), ("E", 23), ("CILJ", 27)],
+            ]
+            
+            Check.equal(f"zmagovalec({tekmovalci1}, {proga1})", 1)
+            
+            proga = ["START", "A", "B", "E", "CILJ"]
+            tekmovalci1 = [
+                [("START", 0), ("A", 5), ("B", 6), ("E", 10), ("CILJ", 11)],
+                [("START", 4), ("A", 9), ("B", 10), ("E", 14), ("CILJ", 16)],
+                [("START", 6), ("B", 11), ("E", 12), ("CILJ", 14)],
+                [("START", 2), ("A", 4), ("B", 6), ("E", 7), ("CILJ", 11)],
+                [("START", 8), ("A", 13), ("G", 17), ("B", 19), ("E", 23), ("CILJ", 27)],
+            ]
+            
+            Check.equal(f"zmagovalec({tekmovalci1}, {proga1})", 3)
+            
+            proga3 = ['START', 'N', 'O', 'K', 'A', 'F', 'L', 'M', 'CILJ']
+            tekmovalci3 = [
+                [('START', 10), ('N', 17), ('O', 35), ('K', 50), ('A', 54), ('F', 68), ('L', 74), ('M', 84), ('CILJ', 99)], 
+                [('START', 12), ('N', 27), ('O', 40), ('K', 46), ('A', 48), ('F', 63), ('H', 72), ('L', 91), ('M', 110), ('CILJ', 124)], 
+                [('START', 14), ('N', 27), ('O', 34), ('K', 37), ('A', 56), ('F', 67), ('L', 77), ('M', 97), ('CILJ', 104)], 
+                [('START', 16), ('N', 22), ('O', 31), ('C', 44), ('K', 49), ('A', 61), ('F', 76), ('L', 88), ('M', 107), ('CILJ', 108)], 
+                [('START', 18), ('N', 31), ('O', 35), ('K', 49), ('A', 50), ('F', 69), ('L', 77), ('M', 94), ('CILJ', 108)]
+            ]
+            # [89, 112, 90, 92, 90]
+            Check.equal(f"zmagovalec({tekmovalci3}, {proga3})", 0)
+            
+            
+            
+            proga4 = ['START', 'H', 'D', 'M', 'K', 'E', 'N', 'J', 'B', 'C', 'F', 'G', 'L', 'I', 'CILJ']
+            tekmovalci4 = [
+                [('START', 19), ('H', 29), ('D', 35), ('M', 45), ('K', 62), ('E', 73), ('N', 88), ('J', 101), ('B', 113), ('C', 131), ('F', 149), ('G', 169), ('L', 188), ('I', 205), ('CILJ', 208)], 
+                [('START', 22), ('H', 33), ('D', 39), ('M', 55), ('K', 59), ('E', 66), ('E', 79), ('N', 93), ('J', 95), ('B', 99), ('C', 109), ('F', 110), ('G', 111), ('L', 129), ('I', 138), ('CILJ', 150)], 
+                [('START', 25), ('H', 40), ('D', 55), ('M', 71), ('K', 90), ('E', 95), ('N', 100), ('J', 105), ('B', 121), ('C', 122), ('F', 124), ('G', 135), ('L', 136), ('I', 147), ('CILJ', 155)], 
+                [('START', 28), ('H', 43), ('D', 46), ('M', 57), ('K', 76), ('E', 86), ('N', 89), ('J', 92), ('B', 96), ('C', 105), ('F', 117), ('G', 129), ('L', 138), ('I', 156), ('CILJ', 176)], 
+                [('START', 31), ('H', 33), ('D', 45), ('M', 51), ('K', 64), ('E', 69), ('N', 84), ('J', 94), ('B', 96), ('C', 114), ('F', 131), ('G', 151), ('L', 164), ('I', 172), ('CILJ', 180)], 
+                [('START', 34), ('H', 43), ('D', 59), ('M', 78), ('K', 89), ('E', 106), ('N', 122), ('J', 139), ('B', 159), ('C', 167), ('F', 186), ('G', 205), ('L', 213), ('I', 223), ('CILJ', 238)], 
+                [('START', 37), ('H', 49), ('D', 60), ('M', 67), ('K', 75), ('E', 78), ('N', 81), ('J', 84), ('B', 95), ('C', 99), ('F', 115), ('G', 119), ('L', 132), ('I', 133), ('CILJ', 146)], 
+                [('START', 40), ('H', 47), ('D', 66), ('M', 77), ('K', 86), ('E', 101), ('N', 111), ('J', 125), ('B', 139), ('C', 151), ('F', 152), ('G', 169), ('L', 176), ('I', 189), ('CILJ', 194)]
+            ]
+            # [189, None, 130, 148, 149, 204, 109, 154]
+            Check.equal(f"zmagovalec({tekmovalci4}, {proga4})", 6)
         except TimeoutError:
             Check.error("Dovoljen čas izvajanja presežen")
         except Exception:
@@ -730,46 +743,19 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoyNzQ4MywidXNlciI6MTE1Mzh9:1vzdCS:-oUzPcTTIggYdzvNzbRCouP0ipUknVrpekydVrriT-4"
+        ] = "eyJwYXJ0Ijo0NDMzMiwidXNlciI6MTE1Mzh9:1wVtMH:VPyKNP2FeKadsPdGUJoH_ooy26BqQY804du2i3YE9k8"
         try:
-            Check.equal('odstrani_samoglasnike("aeoIcesta")', "cesta")
-            Check.secret(odstrani_samoglasnike("laika"))
-            Check.secret(odstrani_samoglasnike("aeter"))
-        except TimeoutError:
-            Check.error("Dovoljen čas izvajanja presežen")
-        except Exception:
-            Check.error(
-                "Testi sprožijo izjemo\n  {0}",
-                "\n  ".join(traceback.format_exc().split("\n"))[:-2],
-            )
-
-    if Check.part():
-        Check.current_part[
-            "token"
-        ] = "eyJwYXJ0IjoyNzQ4NCwidXNlciI6MTE1Mzh9:1vzdCS:Ar49MQ1-7Dnwuus-u28CET2AyE4REsanWlVhruW9Jvo"
-        try:
-            Check.equal('obrni_oklepaje("((()(3+4)))")', ")))()3+4(((")
-            Check.secret(obrni_oklepaje("1234()"))
-            Check.secret(obrni_oklepaje("1(2(3(4))))))))))"))
-        except TimeoutError:
-            Check.error("Dovoljen čas izvajanja presežen")
-        except Exception:
-            Check.error(
-                "Testi sprožijo izjemo\n  {0}",
-                "\n  ".join(traceback.format_exc().split("\n"))[:-2],
-            )
-
-    if Check.part():
-        Check.current_part[
-            "token"
-        ] = "eyJwYXJ0IjoyNzQ4NSwidXNlciI6MTE1Mzh9:1vzdCS:Ql_v8ln_T-CKk3sxR8_A12r_Siwfj9G2p-8ZWdf17GM"
-        try:
-            Check.equal('prestej_posebno("aa  a ", "a", 2)', 3)
-            Check.equal('prestej_posebno("aa  a ", "a", 3)', 1)
-            Check.secret(prestej_posebno("1234()", "3", 5))
-            Check.secret(prestej_posebno("xyxxx     x x x", "x", 4))
-            Check.secret(prestej_posebno("xyxxx     x x x", "x", 5))
-            Check.secret(prestej_posebno("xyxxx     x x x", "x", 6))
+            testi = [
+                ([("START", 0), ("A", 5), ("B", 6), ("E", 10), ("CILJ", 11)], ["START", "A", "B", "E", "CILJ"], ["START:    0    0", "A:    5    5", "B:    6    1", "E:    10    4", "CILJ:    11    1"]),
+                ([("START", 2), ("A", 4), ("B", 6), ("E", 7), ("CILJ", 11)], ["START", "A", "B", "E", "CILJ"], ["START:    0    0", "A:    2    2", "B:    4    2", "E:    5    1", "CILJ:    9    4"]),
+                ([("START", 4), ("A", 9), ("B", 10), ("E", 14), ("CILJ", 16)], ["START", "A", "B", "E", "CILJ"], ["START:    0    0", "A:    5    5", "B:    6    1", "E:    10    4", "CILJ:    12    2"]),
+                ([("START", 6), ("B", 11), ("E", 12), ("CILJ", 14)], ["START", "A", "B", "E", "CILJ"], ["DQ"]),
+                ([("START", 8), ("A", 13), ("G", 17), ("B", 19), ("E", 23), ("CILJ", 27)], ["START", "A", "B", "E", "CILJ"], ["START:    0    0", "A:    5    5", "G:    9    4", "B:    11    2", "E:    15    4", "CILJ:    19    4"]),
+            ]
+            
+            for i, (tek, proga, izhod) in enumerate(testi):
+                izpisi(tek, proga, f"tek{i}.txt")
+                Check.out_file(f"tek{i}.txt", izhod)
         except TimeoutError:
             Check.error("Dovoljen čas izvajanja presežen")
         except Exception:
