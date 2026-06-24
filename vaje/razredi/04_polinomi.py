@@ -772,7 +772,7 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoxNzQxLCJ1c2VyIjoxMTUzOH0:1wEplP:ULfCuZEZ-DD_5ULQRBEEk42vSZQRxTQ207-ZYBBj_ig"
+        ] = "eyJwYXJ0IjoxNzQxLCJ1c2VyIjoxMTUzOH0:1wcR91:TFM2Q9qXBsLEc2sn-Q4uJ7enrTY8xqagF3T7cXqsvt0"
         try:
             test_data = [
                 ('Polinom([1, 2, 3]).koef', [1, 2, 3]),
@@ -820,7 +820,7 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoxNzQyLCJ1c2VyIjoxMTUzOH0:1wEplP:S4PLcdGepxenaGuV2RxSFdKUEenCRmzfMXFiupZQLCw"
+        ] = "eyJwYXJ0IjoxNzQyLCJ1c2VyIjoxMTUzOH0:1wcR91:yp0_ct-TBUX67GQucZLue1TtrnAVjnDWB68cwtX4sm4"
         try:
             test_data = [
                 ('Polinom([7, 2, 0, 1]).stopnja()', 3),
@@ -843,7 +843,7 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoxNzQzLCJ1c2VyIjoxMTUzOH0:1wEplP:iMNAvLpZMILMTz1-AF4USWqavqe6Bl0wm0jHGJOu59k"
+        ] = "eyJwYXJ0IjoxNzQzLCJ1c2VyIjoxMTUzOH0:1wcR91:CNO9Vnk7Zx7-TRqMxji1sCJcVKBzV-WgRtakPCC_OC8"
         try:
             test_data = [
                 ('repr(Polinom([1, 2, 3]))', "Polinom([1, 2, 3])"),
@@ -871,7 +871,7 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoxNzQ0LCJ1c2VyIjoxMTUzOH0:1wEplP:NOeeMmJ7M4nD_WPXYLzY2aMYEzSI89AKJD0mwI23i4c"
+        ] = "eyJwYXJ0IjoxNzQ0LCJ1c2VyIjoxMTUzOH0:1wcR91:9HjZo0CxOfyNfvbGL5wFImJA690ihrD1e2h0-vox690"
         try:
             test_data = [
                 ('Polinom([1, 2, 3]) == Polinom([1, 2, 3, 0, 0])', True),
@@ -896,7 +896,7 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoxNzQ1LCJ1c2VyIjoxMTUzOH0:1wEplP:scmkpafr83qLHZUxViE8b-STEQrtxJWO_IOyXTxBgX8"
+        ] = "eyJwYXJ0IjoxNzQ1LCJ1c2VyIjoxMTUzOH0:1wcR91:ew2cLEpQ93Mmif4o1kdJZo2736p0s2eA9ETdZDqa1EA"
         try:
             test_data = [
                 ('Polinom([3, 2, 0, 1])(1)', 6),
@@ -922,7 +922,7 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoxNzQ2LCJ1c2VyIjoxMTUzOH0:1wEplP:I6OjGDfKUXiei0iNfzFDx9B8ltO-woI14Z8uxrZNcAM"
+        ] = "eyJwYXJ0IjoxNzQ2LCJ1c2VyIjoxMTUzOH0:1wcR91:r4zd0NwitZiyYH7Rvv5yTMkN9uh-XiDGzyoVphcj2aY"
         try:
             test_data = [
                 ('Polinom([1, 2, 3, 0, 0, 0, 0, 7]) + Polinom([4, 5])', Polinom([5, 7, 3, 0, 0, 0, 0, 7])),
@@ -961,7 +961,7 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoxNzQ3LCJ1c2VyIjoxMTUzOH0:1wEplP:z9mzXbu-xhx1B22PfPWDDpowS9gVe6nHgisL5KSWhVE"
+        ] = "eyJwYXJ0IjoxNzQ3LCJ1c2VyIjoxMTUzOH0:1wcR91:0s9g9OZS6_5ol1QR5ZABsA8uqp3OQEzG8GiwG5c48Qg"
         try:
             test_data = [
                 ('Polinom([1, 0, 1]) * Polinom([4, 2])', Polinom([4, 2, 4, 2])),
@@ -1004,7 +1004,7 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoxNzQ4LCJ1c2VyIjoxMTUzOH0:1wEplP:x8WYMoQT5r6-HcsA_HKIzUbcGVCnyDN3g_40VNBQHlk"
+        ] = "eyJwYXJ0IjoxNzQ4LCJ1c2VyIjoxMTUzOH0:1wcR91:KtNNx90-Y9sNe_vQjAPvBd2Tbtf9Grk2ZGGmE7_c_KQ"
         try:
             test_data = [
                 ('Polinom([5, 1, 4, -3, 5, -1]).odvod()', Polinom([1, 8, -9, 20, -5])),
@@ -1039,7 +1039,7 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoxNzQ5LCJ1c2VyIjoxMTUzOH0:1wEplP:OZ9R-LaUfEN1wO2M78rrkKNLE9kXfSRDpRP1M6Ws0eY"
+        ] = "eyJwYXJ0IjoxNzQ5LCJ1c2VyIjoxMTUzOH0:1wcR91:KTVWgREdhgFYJIYABuOeJvX6um0ukN3QiqyJb3WK9mw"
         try:
             test_data = [
                 ('str(Polinom([1, 2, 3]))', "3x^2 + 2x + 1"),
@@ -1070,7 +1070,7 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoyNzczMSwidXNlciI6MTE1Mzh9:1wEplP:iAUXdT_n8uVmrS9CEBp0yxGdFocxQ5mXBgcqpMdSRvg"
+        ] = "eyJwYXJ0IjoyNzczMSwidXNlciI6MTE1Mzh9:1wcR91:P1AzI6Co_C_tCRcK7W6ADnuUjvk6ow6-UGTfXw-rPEo"
         try:
             test_data = [
                 ("list(Polinom([1, 2, 3]))", [(3, 2), (2, 1), (1, 0)]),

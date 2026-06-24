@@ -19,8 +19,6 @@
 class BitniCekin:
     def __init__(self, stanje=0):
         self.stanje = stanje
-
-        
 # =====================================================================@001713=
 # 2. podnaloga
 # Sestavite metodo `__str__(self)`, ki predstavi stanje na računu v obliki:
@@ -105,8 +103,8 @@ def prenesi(racun1, racun2, koliko):
         return True
     else:
         return False
-        
-        
+
+
 
 
 
@@ -722,7 +720,7 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoxNzEyLCJ1c2VyIjoxMTUzOH0:1wEplP:mtRx1mEZxsW2X9nUxqCeRxpj3BZUBD8OUcTpHAOgS7Q"
+        ] = "eyJwYXJ0IjoxNzEyLCJ1c2VyIjoxMTUzOH0:1wcR91:dm3W25iSoelY5RMY7BBV-WIAUoCz5-91bS6S63QnsPg"
         try:
             test_data = [
                 ('BitniCekin(5).stanje', 5),
@@ -743,7 +741,7 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoxNzEzLCJ1c2VyIjoxMTUzOH0:1wEplP:eYdWeac2YStCVMnUfdTQjbZunjnPiEVTd7oAUmzTrwU"
+        ] = "eyJwYXJ0IjoxNzEzLCJ1c2VyIjoxMTUzOH0:1wcR91:Vj313foM2QcelhvlsTCuGnii5Ro44_liSXa2fID_tAg"
         try:
             test_data = [
                 ('str(BitniCekin(5))', 'Število bitnih cekinov na računu: 5'),
@@ -764,7 +762,7 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoxNzE0LCJ1c2VyIjoxMTUzOH0:1wEplP:M5YgOL9h9bFOYaMQgXkXdwMYCpqy_03VrNP0MJJ7kao"
+        ] = "eyJwYXJ0IjoxNzE0LCJ1c2VyIjoxMTUzOH0:1wcR91:erAlHkUNF4nszrkRboGUIcSaurgCMbf5en4Tb0Dg4v4"
         try:
             test_data = [
                 ('repr(BitniCekin(5))', 'BitniCekin(5)'),
@@ -785,7 +783,7 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoxNzE1LCJ1c2VyIjoxMTUzOH0:1wEplP:TU8G27Dj_fYm4DNilWKU4vh3cSBwyLR9pHIRnRI1f6g"
+        ] = "eyJwYXJ0IjoxNzE1LCJ1c2VyIjoxMTUzOH0:1wcR91:H3tWFigaWCETEGQsxXju-OvW_qrwjlisnYRinuA-vKg"
         try:
             Check.run(["racun = BitniCekin(10)", "prvi_dvig = racun.dvig(5)",
                        "drugi_dvig = racun.dvig(10)", "polog = racun.polog(30)",
@@ -803,7 +801,7 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoxNzE2LCJ1c2VyIjoxMTUzOH0:1wEplP:4mXdYTBygVvl9b2vgbQadf9lIY2T7LKWcuxpclnSypQ"
+        ] = "eyJwYXJ0IjoxNzE2LCJ1c2VyIjoxMTUzOH0:1wcR91:esjYEyFKLHuyuPojUTHo7QmgYdCnRfrFRkxv04n8ll4"
         try:
             test_data = [
                 (["racun1 = BitniCekin(10)", "racun2 = BitniCekin(10)",

@@ -652,7 +652,7 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoxOTI4LCJ1c2VyIjoxMTUzOH0:1wEplP:ZQ7P-zxK82D0pPmBC7NOmARzBQKCSuE_RQDFzq8L8z0"
+        ] = "eyJwYXJ0IjoxOTI4LCJ1c2VyIjoxMTUzOH0:1wcR91:kvSDikLjitqLxpyByfMg5Wu66lt5SQGJuf9vfnT8NwE"
         try:
             Check.generator("poglej_in_povej()", ['1', '11', '21', '1211', '111221', '312211', '13112221', '1113213211', '31131211131221', '13211311123113112211',
                                                   '11131221133112132113212221', '3113112221232112111312211312113211', '1321132132111213122112311311222113111221131221',
@@ -668,7 +668,7 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoxOTI5LCJ1c2VyIjoxMTUzOH0:1wEplP:N-UxiM_CEXSFN9wU_YLYZcD6Mrsl1TS55G3_6R5bhrc"
+        ] = "eyJwYXJ0IjoxOTI5LCJ1c2VyIjoxMTUzOH0:1wcR91:zSFUXgYBkdcFH9bLzMGPdUX7i7F_nURiz_1Kp08nHNA"
         try:
             Check.generator("ravnilo()", [1, 2, 1, 3, 1, 2, 1, 4, 1, 2, 1, 3, 1, 2, 1, 5, 1, 2, 1, 3, 1, 2, 1, 4, 1, 2, 1, 3, 1, 2, 1, 6, 1, 2, 1, 3, 1, 2, 1, 4, 1, 2, 1,
                                           3, 1, 2, 1, 5, 1, 2, 1, 3, 1, 2, 1, 4, 1, 2, 1, 3, 1, 2, 1, 7, 1, 2, 1, 3, 1, 2, 1, 4, 1, 2, 1, 3, 1, 2, 1, 5, 1, 2, 1, 3, 1, 2,

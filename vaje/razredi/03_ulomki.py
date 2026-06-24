@@ -40,7 +40,6 @@ class Ulomek:
             st, im = -st, -im
         self.im = im//gcd(st,im)
         self.st = st//gcd(st, im)
-
 # =====================================================================@001733=
 # 3. podnaloga
 # Definirajte metodo  `__str__`, ki predstavi ulomek z nizom
@@ -742,7 +741,7 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoxNzMxLCJ1c2VyIjoxMTUzOH0:1wEplP:9ynVbvWuXHR1cI_0QqEL0kEdIBlsNwgs-wMous6GYPk"
+        ] = "eyJwYXJ0IjoxNzMxLCJ1c2VyIjoxMTUzOH0:1wcR91:w2LAAJRABt_pL-e0Cku2Eezziu0lngtHBywo1OcVwHY"
         try:
             test_data = [
                 ('gcd(63, 35)', 7),
@@ -765,7 +764,7 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoxNzMyLCJ1c2VyIjoxMTUzOH0:1wEplP:cGZZdtYE5dftEs-PT0Xr90a8aXSSp7MTQwDI5nLBQ7c"
+        ] = "eyJwYXJ0IjoxNzMyLCJ1c2VyIjoxMTUzOH0:1wcR91:4XjkVgkfMgq4L0m9ho9-63cR0gWyJxNojkBdk4Kztv4"
         try:
             test_data = [
                 ('Ulomek(5, 1).st', 5),
@@ -801,7 +800,7 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoxNzMzLCJ1c2VyIjoxMTUzOH0:1wEplP:hI_IyZA2TJ_HnZapsvpyknExDQnmp1qvsx_j7xwwy7w"
+        ] = "eyJwYXJ0IjoxNzMzLCJ1c2VyIjoxMTUzOH0:1wcR91:Hf2hGiGRzarQ9rQexb_okasX9JhEcriznHJ6MHYxGZs"
         try:
             test_data = [
                 ('str(Ulomek(20, 6))', '10/3'),
@@ -828,7 +827,7 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoxNzM0LCJ1c2VyIjoxMTUzOH0:1wEplP:t9PA6hJFy3kuYd8mLbp-XNjZa24DVL_LeBuCQjMyo20"
+        ] = "eyJwYXJ0IjoxNzM0LCJ1c2VyIjoxMTUzOH0:1wcR91:Kx_XMfkPMO-UCtKsGwAUX41bH9byvONF92kLt_axJf0"
         try:
             test_data = [
                 ('repr(Ulomek(20, 6))', 'Ulomek(10, 3)'),
@@ -855,7 +854,7 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoxNzM1LCJ1c2VyIjoxMTUzOH0:1wEplP:L7lMi6AaOTw-8tp7AnS8OEX2Kc-dT4TGDZKaZA95jtY"
+        ] = "eyJwYXJ0IjoxNzM1LCJ1c2VyIjoxMTUzOH0:1wcR91:_9lnZQmmFF4meUenzLifxwzGlm1GpvfiReQcCtyK0Ec"
         try:
             test_data = [
                 ('Ulomek(1, 3) == Ulomek(2, 3)', False),
@@ -889,7 +888,7 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoxNzM2LCJ1c2VyIjoxMTUzOH0:1wEplP:t91JyGk0hMQNJxN8wzSNHR8_Ur_EyB65wLMd1u_sJVI"
+        ] = "eyJwYXJ0IjoxNzM2LCJ1c2VyIjoxMTUzOH0:1wcR91:JxAMK8U73X6tpPkuG3qCKWQKRmhCaivs1sIYnQxL_GI"
         try:
             test_data = [
                 ('Ulomek(1, 6) + Ulomek(1, 4)', Ulomek(5, 12)),
@@ -918,7 +917,7 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoxNzM3LCJ1c2VyIjoxMTUzOH0:1wEplP:INQGdcTGGSkkF8_GI5kLQ8fRHyXc-0X54ioFX5PaRIk"
+        ] = "eyJwYXJ0IjoxNzM3LCJ1c2VyIjoxMTUzOH0:1wcR91:maRJfhDC6TfTJpGI6pq6A-PRUSZRLeBCP7FmoQfmIpM"
         try:
             test_data = [
                 ('Ulomek(1, 6) - Ulomek(1, 4)', Ulomek(-1, 12)),
@@ -949,7 +948,7 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoxNzM4LCJ1c2VyIjoxMTUzOH0:1wEplP:gw4wyGh-ZPp64StKqN2VfKIGEmZoN8mTj3Jf4PkP4Qg"
+        ] = "eyJwYXJ0IjoxNzM4LCJ1c2VyIjoxMTUzOH0:1wcR91:2mK2bnYmCkVTehOdq3kOT9UmU2GflyTtu8iD3q04fGI"
         try:
             test_data = [
                 ('Ulomek(1, 3) * Ulomek(1, 2)', Ulomek(1, 6)),
@@ -977,7 +976,7 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoxNzM5LCJ1c2VyIjoxMTUzOH0:1wEplP:U7EPbBDFenza_RbUlSa5bY3t4zei2h4-PwJv5uFiSTQ"
+        ] = "eyJwYXJ0IjoxNzM5LCJ1c2VyIjoxMTUzOH0:1wcR91:VIdpQyLJcwyEYotXIRhMtLu_EOncHNvOSFiSfdIXve8"
         try:
             test_data = [
                 ('Ulomek(1, 6) / Ulomek(1, 4)', Ulomek(2, 3)),
@@ -1006,7 +1005,7 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoxNzQwLCJ1c2VyIjoxMTUzOH0:1wEplP:CuEXGilvoUNIPIjuT5vOyVw2jfp-nvOG4ffUJu8Vih0"
+        ] = "eyJwYXJ0IjoxNzQwLCJ1c2VyIjoxMTUzOH0:1wcR91:xWWRcyXKyXZORjDAOg0Wspw4P0HyJ0W2A6bo3fzcji4"
         try:
             test_data = [
                 ('priblizek(3)', Ulomek(8, 3)),

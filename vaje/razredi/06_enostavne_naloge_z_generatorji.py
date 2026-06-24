@@ -50,7 +50,6 @@ def collatz(n):
         else: 
             n = n*3 +1
     yield 1
-
 # =====================================================================@001934=
 # 5. podnaloga
 # Sestavite generator `delitelji`, ki kot argument dobi naravno število
@@ -85,7 +84,8 @@ def ucinkoviti_delitelji(n):
                 deli.append(n // i)
         i += 1
     for d in deli[::-1]:
-        yield d 
+        yield d
+
 
 
 
@@ -702,7 +702,7 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoxOTMwLCJ1c2VyIjoxMTUzOH0:1wEplP:33AZKAD5Ft1s2PFX_r67z0qRgkhx_n3ifcV1U6l2vgc"
+        ] = "eyJwYXJ0IjoxOTMwLCJ1c2VyIjoxMTUzOH0:1wcR91:Dn03uP33X1qfAh7J-YZFnSlhrBhxGtwtb3USvyoOTVg"
         try:
             testCases = [("stevke(8)", [8], {'should_stop': True}),
                          ("stevke(43)", [3, 4], {'should_stop': True}),
@@ -723,7 +723,7 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoxOTMxLCJ1c2VyIjoxMTUzOH0:1wEplP:sn3p2iBxukumkK6W-IwPtVF4pZgALPWc0zvEXwSwPCc"
+        ] = "eyJwYXJ0IjoxOTMxLCJ1c2VyIjoxMTUzOH0:1wcR91:09dhxYvvKpouywuwj3bdGcmhQ8X4nRp9u0I9TIsfpNQ"
         try:
             testCases = [("potence_naravnih(2)", [1, 4, 9, 16, 25, 36, 49, 64, 81, 100], {'further_iter': 100}),
                          ("potence_naravnih(3)", [1, 8, 27, 64, 125, 216, 343, 512, 729, 1000], {'further_iter': 100}),
@@ -744,7 +744,7 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoxOTMyLCJ1c2VyIjoxMTUzOH0:1wEplP:LcuSYTjpQvJePXjLWlkJ92fzC6UfQDbU41zhNhCiuS4"
+        ] = "eyJwYXJ0IjoxOTMyLCJ1c2VyIjoxMTUzOH0:1wcR91:TW03C5TG08-DF9YZoJCzTkE39ppDJSJX7Wy8SMlDTAg"
         try:
             testCases = [("fakultete(0)", [1, 1, 2, 6, 24, 120, 720, 5040, 40320, 362880, 3628800, 39916800, 479001600, 6227020800, 87178291200, 1307674368000, 20922789888000, 355687428096000, 6402373705728000, 121645100408832000], {'further_iter': 10}),
                          ("fakultete(1)", [1, 2, 6, 24, 120, 720, 5040, 40320, 362880, 3628800], {'further_iter': 10}),
@@ -765,7 +765,7 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoxOTMzLCJ1c2VyIjoxMTUzOH0:1wEplP:vj885dIgrSikX_ZPUUjADjwSPxuHdZJJlCspnT3eRPU"
+        ] = "eyJwYXJ0IjoxOTMzLCJ1c2VyIjoxMTUzOH0:1wcR91:Z7svZmu_uQINups9AxsVU2d2OnqY2_N8QjR8voYhxFc"
         try:
             testCases = [("collatz(20)", [20, 10, 5, 16, 8, 4, 2, 1], {'should_stop': True}),
                          ("collatz(1)", [1], {'should_stop': True}),
@@ -791,7 +791,7 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoxOTM0LCJ1c2VyIjoxMTUzOH0:1wEplP:edCr5ycuHFaoXGNvhUNqvkMg8CDe8rAKyHj6sKw3SIo"
+        ] = "eyJwYXJ0IjoxOTM0LCJ1c2VyIjoxMTUzOH0:1wcR91:vATEP-wFWXAIzrryKglYdwj9Fd3gH5GubR1X05v9VeM"
         try:
             testCases = [("delitelji(7)", [1, 7], {'should_stop': True}),
                          ("delitelji(12)", [1, 2, 3, 4, 6, 12], {'should_stop': True}),
@@ -813,7 +813,7 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoxOTM1LCJ1c2VyIjoxMTUzOH0:1wEplP:PYcqFaRlx8QrYQqRo1I1ff0ONUjDEkZXK0F34Q3AYzw"
+        ] = "eyJwYXJ0IjoxOTM1LCJ1c2VyIjoxMTUzOH0:1wcR91:k2CvKGVQDJ6wABY4fAxOvFuZXDZMFruqIB8Zl9dnO3I"
         try:
             testCases = [("ucinkoviti_delitelji(7)", [1, 7], {'should_stop': True}),
                          ("ucinkoviti_delitelji(12)", [1, 2, 3, 4, 6, 12], {'should_stop': True}),

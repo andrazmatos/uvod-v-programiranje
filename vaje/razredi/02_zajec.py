@@ -202,6 +202,13 @@ def uredi(teze, starosti):
 
 
 
+
+
+
+
+
+
+
 # ============================================================================@
 # fmt: off
 "Če vam Python sporoča, da je v tej vrstici sintaktična napaka,"
@@ -718,7 +725,7 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoxNzA2LCJ1c2VyIjoxMTUzOH0:1wEplP:ka4iqJpx5UUYHTw66Xw-HY5ezkjWYchkbgMOPh9eGF0"
+        ] = "eyJwYXJ0IjoxNzA2LCJ1c2VyIjoxMTUzOH0:1wcR91:xwjgYnYgAyOqegf7r3znQzxfL2effSCcd_-buxqwpJ8"
         try:
             test_data = [
                 ('Zajec(5, 3).teza', 5),
@@ -740,7 +747,7 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoxNzA3LCJ1c2VyIjoxMTUzOH0:1wEplP:gg8BIp33V4Q9AMX5ydTjCk-Dx_N7F3GPAJDz5QUv6UQ"
+        ] = "eyJwYXJ0IjoxNzA3LCJ1c2VyIjoxMTUzOH0:1wcR91:J0F3KKdoHk0EADj0DqEJ1ZH-j1g5MFeRRxgxu2htHzE"
         try:
             Check.run(["z = Zajec(5, 2)", "z.nahrani(2)", "nova_teza = z.teza"],
                       {'nova_teza': 5.6})
@@ -766,7 +773,7 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoxNzA4LCJ1c2VyIjoxMTUzOH0:1wEplP:sVyigBXO2OzVW5gjQBJ-8TXrn1jzRISnBsYqp24Bpik"
+        ] = "eyJwYXJ0IjoxNzA4LCJ1c2VyIjoxMTUzOH0:1wcR91:MluCE7x1nnDQxs4J85AoQVa6geRHwGXTChYjxD4w6k8"
         try:
             test_data = [
                 ('str(Zajec(5, 2))', 'Zajec težak 5 kg, star 2 let.'),
@@ -786,7 +793,7 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoxNzA5LCJ1c2VyIjoxMTUzOH0:1wEplP:xWla07QZOxeMMsANucfyMah4uvKpCiiJfDjhlTdD_-U"
+        ] = "eyJwYXJ0IjoxNzA5LCJ1c2VyIjoxMTUzOH0:1wcR91:0ZBEduPYDA3aH6AlQKZoyA1mQ_thClztaMYMvKbzd-o"
         try:
             test_data = [
                 ('repr(Zajec(5, 2))', 'Zajec(5, 2)'),
@@ -806,7 +813,7 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoxNzEwLCJ1c2VyIjoxMTUzOH0:1wEplP:RaYpjjkBGSI3bIgEsrhU9UMcVMtEcSgXiPZBvQthubQ"
+        ] = "eyJwYXJ0IjoxNzEwLCJ1c2VyIjoxMTUzOH0:1wcR91:INOJrkaySVooN7SnABbY9cB4me4j6WQiij2IEs7fPDo"
         try:
             prav = (
                 Check.equal("Zajec(3, 10) < Zajec(5, 5)", True) and 
@@ -829,7 +836,7 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoxNzExLCJ1c2VyIjoxMTUzOH0:1wEplP:dJpC58GODP8HpgirXxk0I1xabatIsUe9_VC4gmFqQQg"
+        ] = "eyJwYXJ0IjoxNzExLCJ1c2VyIjoxMTUzOH0:1wcR91:vBa704vlz71NAsIgXmsrmMRtWno678eggUeKeyVmAYg"
         try:
             Check.run(["teze = [10, 10, 5]",  "starosti = [10, 11, 15]",
                        "seznam = uredi(teze, starosti)", "urejeno = [(z.teza, z.starost) for z in seznam]"],

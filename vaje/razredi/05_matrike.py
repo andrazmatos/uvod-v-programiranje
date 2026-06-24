@@ -687,7 +687,7 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoyNzc2MiwidXNlciI6MTE1Mzh9:1wEplP:sv6RBR3vP84ZxWKniCmV58U4GOVo6ogHp7lepyWI-mw"
+        ] = "eyJwYXJ0IjoyNzc2MiwidXNlciI6MTE1Mzh9:1wcR91:Fp0Ipp0mXS6oT_7AFe6wXZxtzT6IwpYxDVdbl4EXdjU"
         try:
             Check.equal("Matrika([[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]]).matrika", [[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]])
             Check.equal("Matrika([[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]]).visina", 4)
@@ -711,7 +711,7 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoyNzc2MywidXNlciI6MTE1Mzh9:1wEplP:1UoPA_CLvSLcJQsMkZw51sS1WgnxWU0-ZPBr7NAR6q8"
+        ] = "eyJwYXJ0IjoyNzc2MywidXNlciI6MTE1Mzh9:1wcR91:stvoXS023_-Er4p3-YQmF9FmBeBgFvvLNaop46ULZ3A"
         try:
             Check.equal('Matrika([[1], [2]]) == Matrika([[1], [2]])', True)
             Check.equal('Matrika([[1], [2]]) == Matrika([[1], [2], [3]])', False)
@@ -727,7 +727,7 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoyNzc2NCwidXNlciI6MTE1Mzh9:1wEplP:DyGIrsqlbeMcrx6XKDLtanP05-CU-VB6TQ5zkDF4xAE"
+        ] = "eyJwYXJ0IjoyNzc2NCwidXNlciI6MTE1Mzh9:1wcR91:TxaAQeNm0EkBJH8Y0AvpgX2xEszfjavSVsNJAUhb2D8"
         try:
             Check.equal("Matrika([[1], [2]]).__str__()", "1\n2")
             Check.equal("Matrika([[1], [2], [3]]).__str__()", "1\n2\n3")
@@ -744,7 +744,7 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoyNzc2NSwidXNlciI6MTE1Mzh9:1wEplP:SoMfLFTQ2gC7UR-7w7XFlq4NA2K8aVxN__IPO-zDwUE"
+        ] = "eyJwYXJ0IjoyNzc2NSwidXNlciI6MTE1Mzh9:1wcR91:q86dy8ZJp_y6k6GF13DJ_RaPoWSDxu5EBvHHDmueJDU"
         try:
             Check.equal('(Matrika([[1], [2]]) + Matrika([[1], [2]]))', Matrika([[2], [4]]))
             Check.equal('(Matrika([[1], [2], [0]]) + Matrika([[1], [2], [3]])).matrika', [[2], [4], [3]])
@@ -761,7 +761,7 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoyNzc2NiwidXNlciI6MTE1Mzh9:1wEplP:qMo7RU2EotngTIbmWp3wMxENpWqFAwAFSTK6HxE4y08"
+        ] = "eyJwYXJ0IjoyNzc2NiwidXNlciI6MTE1Mzh9:1wcR91:8wyElY1tlO9aDCNInN5IIG0Ag_NYys5Flf6fJnRi7KM"
         try:
             Check.equal('(Matrika([[-1], [2]]) * Matrika([[1], [2]])).matrika', [[-1], [4]])
             Check.equal('(Matrika([[-12], [2]]) * Matrika([[1], [2]])).matrika', [[-12], [4]])
