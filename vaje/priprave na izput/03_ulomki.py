@@ -4,30 +4,31 @@
 # 1. podnaloga
 # Izven razreda sestavite funkcijo `gcd(m, n)`, ki izračuna največji skupni
 # delitelj števil `m` in `n`. Zgled:
-# 
+#
 #     >>> gcd(35, 63)
 #     7
 # =============================================================================
 def gcd(m, n):
-    m,n= abs(m),abs(n)
-    if n > m:
+    m,n=abs(m),abs(n)
+    if m > n:
         m, n = n, m
-    delitelji_m_in_n = []
-    for i in range(m+1):
-        if i == 0:
-            i= i+1
-        if m%i == 0 and n%i == 0 :
-            delitelji_m_in_n.append(i)
-    return max(delitelji_m_in_n)
+    i = 1
+    for stevilka in range(1, m + 1):
+        if n % stevilka == 0 and m % stevilka == 0:
+            i = stevilka
+
+    return i
+
+
 # =====================================================================@001732=
 # 2. podnaloga
 # Definirajte razred `Ulomek`, s katerim predstavimo ulomek. Števec in
 # imenovalec sta celi števili, pri čemer je morebiten negativen predznak
 # vedno v števcu. Ulomki naj bodo vedno okrajšani. Atributa naj se
 # imenujeta `st` in `im`.
-# 
+#
 # Najprej definirajte konstruktor `__init__(self, st, im)`. Zgled:
-# 
+#
 #     >>> u = Ulomek(5, 20)
 #     >>> u.st
 #     1
@@ -36,15 +37,23 @@ def gcd(m, n):
 # =============================================================================
 class Ulomek:
     def __init__(self, st, im):
-        if im < 0:
-            st, im = -st, -im
-        self.im = im//gcd(st,im)
-        self.st = st//gcd(st, im)
+        i = 1
+        if st * im < 0:
+            i = -1
+        if st == 0:
+            self.st = 0
+            self.im = 1
+        else:
+            krajsanec = gcd(st, im)
+            self.st = i * (abs(st) // krajsanec)
+            self.im = abs(im) // krajsanec
+
+
 # =====================================================================@001733=
 # 3. podnaloga
 # Definirajte metodo  `__str__`, ki predstavi ulomek z nizom
 # oblike `'st/im'`. Zgled:
-# 
+#
 #     >>> u = Ulomek(5, 20)
 #     >>> print(u)
 #     1/4
@@ -55,175 +64,98 @@ class Ulomek:
 # 4. podnaloga
 # Definirajte še metodo  `__repr__`, ki predstavi ulomek z nizom
 # oblike `'Ulomek(st, im)'`. Zgled:
-# 
+#
 #     >>> u = Ulomek(5, 20)
 #     >>> u
 #     Ulomek(1, 4)
 # =============================================================================
-
+    def __repr__(self):
+        return f'Ulomek({self.st}, {self.im})'
 # =====================================================================@001735=
 # 5. podnaloga
 # Definirajte metodo  `__eq__(self, other)`, ki vrne `True` če sta dva
 # ulomka enaka, in `False` sicer. Zgled:
-# 
+#
 #     >>> Ulomek(1, 3) == Ulomek(2, 3)
 #     False
 #     >>> Ulomek(2, 3) == Ulomek(10, 15)
 #     True
 # =============================================================================
-
+    def __eq__(self, other):
+        if self.st == other.st and self.im == other.im:
+            return True
+        else:
+            return False
 # =====================================================================@001736=
 # 6. podnaloga
 # Definirajte metodo  `__add__(self, other)`, ki vrne vsoto dveh ulomkov.
 # Ko definirate to metodo, lahko ulomke seštevate kar z operatorjem `+`.
 # Na primer:
-# 
+#
 #     >>> Ulomek(1, 6) + Ulomek(1, 4)
 #     Ulomek(5, 12)
 # =============================================================================
-
+    def __add__(self, other):
+        st = self.st*other.im + other.st*self.im
+        im = self.im*other.im
+        return Ulomek(st, im)
 # =====================================================================@001737=
 # 7. podnaloga
 # Definirajte metodo  `__sub__`, ki vrne razliko dveh ulomkov.
 # Ko definirate to metodo, lahko ulomke odštevate kar z operatorjem `-`.
 # Na primer:
-# 
+#
 #     >>> Ulomek(1, 4) - Ulomek(1, 6)
 #     Ulomek(1, 12)
 # =============================================================================
+    def __sub__(self, other):
+        st = self.st*other.im - other.st*self.im
+        im = self.im*other.im
+        return Ulomek(st, im)
 
 # =====================================================================@001738=
 # 8. podnaloga
 # Definirajte metodo  `__mul__`, ki vrne zmnožek dveh ulomkov.
 # Ko definirate to metodo, lahko ulomke množite kar z operatorjem `*`.
 # Na primer:
-# 
+#
 #     >>> Ulomek(1, 3) * Ulomek(1, 2)
 #     Ulomek(1, 6)
 # =============================================================================
-
+    def __mul__(self, other):
+        st = self.st*other.st
+        im = self.im*other.im
+        return Ulomek(st, im)
 # =====================================================================@001739=
 # 9. podnaloga
 # Definirajte metodo  `__truediv__`, ki vrne kvocient dveh
 # ulomkov. Ko definirate to metodo, lahko ulomke delite kar z operatorjem
 # `/`. Na primer:
-# 
+#
 #     >>> Ulomek(1, 6) / Ulomek(1, 4)
 #     Ulomek(2, 3)
 # =============================================================================
-
+    def __mul__(self, other):
+        st = self.st*other.im
+        im = self.im*other.st
+        return Ulomek(st, im)
 # =====================================================================@001740=
 # 10. podnaloga
 # Izven razreda `Ulomek` definirajte funkcijo `priblizek(n)`, ki vrne
 # vsoto $$\frac{1}{0!} + \frac{1}{1!} + \frac{1}{2!} + … + \frac{1}{n!}.$$
 # Funkcija naj uporablja razred `Ulomek`. Zgled:
-# 
+#
 #     >>> priblizek(5)
 #     Ulomek(163, 60)
-# 
+#
 # Ali je izračunana vrednost blizu števila $e$?
 # =============================================================================
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+import math
+def priblizek(n):
+    f = 0
+    for i in range(n+1):
+        f += 1/(math.factorial(i))
+    return f
 
 # ============================================================================@
 # fmt: off
@@ -741,7 +673,7 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoxNzMxLCJ1c2VyIjoxMTUzOH0:1wcR91:w2LAAJRABt_pL-e0Cku2Eezziu0lngtHBywo1OcVwHY"
+        ] = "eyJwYXJ0IjoxNzMxLCJ1c2VyIjoxMTUzOH0:1wEplP:9ynVbvWuXHR1cI_0QqEL0kEdIBlsNwgs-wMous6GYPk"
         try:
             test_data = [
                 ('gcd(63, 35)', 7),
@@ -764,7 +696,7 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoxNzMyLCJ1c2VyIjoxMTUzOH0:1wcR91:4XjkVgkfMgq4L0m9ho9-63cR0gWyJxNojkBdk4Kztv4"
+        ] = "eyJwYXJ0IjoxNzMyLCJ1c2VyIjoxMTUzOH0:1wEplP:cGZZdtYE5dftEs-PT0Xr90a8aXSSp7MTQwDI5nLBQ7c"
         try:
             test_data = [
                 ('Ulomek(5, 1).st', 5),
@@ -800,7 +732,7 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoxNzMzLCJ1c2VyIjoxMTUzOH0:1wcR91:Hf2hGiGRzarQ9rQexb_okasX9JhEcriznHJ6MHYxGZs"
+        ] = "eyJwYXJ0IjoxNzMzLCJ1c2VyIjoxMTUzOH0:1wEplP:hI_IyZA2TJ_HnZapsvpyknExDQnmp1qvsx_j7xwwy7w"
         try:
             test_data = [
                 ('str(Ulomek(20, 6))', '10/3'),
@@ -827,7 +759,7 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoxNzM0LCJ1c2VyIjoxMTUzOH0:1wcR91:Kx_XMfkPMO-UCtKsGwAUX41bH9byvONF92kLt_axJf0"
+        ] = "eyJwYXJ0IjoxNzM0LCJ1c2VyIjoxMTUzOH0:1wEplP:t9PA6hJFy3kuYd8mLbp-XNjZa24DVL_LeBuCQjMyo20"
         try:
             test_data = [
                 ('repr(Ulomek(20, 6))', 'Ulomek(10, 3)'),
@@ -854,7 +786,7 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoxNzM1LCJ1c2VyIjoxMTUzOH0:1wcR91:_9lnZQmmFF4meUenzLifxwzGlm1GpvfiReQcCtyK0Ec"
+        ] = "eyJwYXJ0IjoxNzM1LCJ1c2VyIjoxMTUzOH0:1wEplP:L7lMi6AaOTw-8tp7AnS8OEX2Kc-dT4TGDZKaZA95jtY"
         try:
             test_data = [
                 ('Ulomek(1, 3) == Ulomek(2, 3)', False),
@@ -888,7 +820,7 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoxNzM2LCJ1c2VyIjoxMTUzOH0:1wcR91:JxAMK8U73X6tpPkuG3qCKWQKRmhCaivs1sIYnQxL_GI"
+        ] = "eyJwYXJ0IjoxNzM2LCJ1c2VyIjoxMTUzOH0:1wEplP:t91JyGk0hMQNJxN8wzSNHR8_Ur_EyB65wLMd1u_sJVI"
         try:
             test_data = [
                 ('Ulomek(1, 6) + Ulomek(1, 4)', Ulomek(5, 12)),
@@ -917,7 +849,7 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoxNzM3LCJ1c2VyIjoxMTUzOH0:1wcR91:maRJfhDC6TfTJpGI6pq6A-PRUSZRLeBCP7FmoQfmIpM"
+        ] = "eyJwYXJ0IjoxNzM3LCJ1c2VyIjoxMTUzOH0:1wEplP:INQGdcTGGSkkF8_GI5kLQ8fRHyXc-0X54ioFX5PaRIk"
         try:
             test_data = [
                 ('Ulomek(1, 6) - Ulomek(1, 4)', Ulomek(-1, 12)),
@@ -948,7 +880,7 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoxNzM4LCJ1c2VyIjoxMTUzOH0:1wcR91:2mK2bnYmCkVTehOdq3kOT9UmU2GflyTtu8iD3q04fGI"
+        ] = "eyJwYXJ0IjoxNzM4LCJ1c2VyIjoxMTUzOH0:1wEplP:gw4wyGh-ZPp64StKqN2VfKIGEmZoN8mTj3Jf4PkP4Qg"
         try:
             test_data = [
                 ('Ulomek(1, 3) * Ulomek(1, 2)', Ulomek(1, 6)),
@@ -976,7 +908,7 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoxNzM5LCJ1c2VyIjoxMTUzOH0:1wcR91:VIdpQyLJcwyEYotXIRhMtLu_EOncHNvOSFiSfdIXve8"
+        ] = "eyJwYXJ0IjoxNzM5LCJ1c2VyIjoxMTUzOH0:1wEplP:U7EPbBDFenza_RbUlSa5bY3t4zei2h4-PwJv5uFiSTQ"
         try:
             test_data = [
                 ('Ulomek(1, 6) / Ulomek(1, 4)', Ulomek(2, 3)),
@@ -1005,7 +937,7 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoxNzQwLCJ1c2VyIjoxMTUzOH0:1wcR91:xWWRcyXKyXZORjDAOg0Wspw4P0HyJ0W2A6bo3fzcji4"
+        ] = "eyJwYXJ0IjoxNzQwLCJ1c2VyIjoxMTUzOH0:1wEplP:CuEXGilvoUNIPIjuT5vOyVw2jfp-nvOG4ffUJu8Vih0"
         try:
             test_data = [
                 ('priblizek(3)', Ulomek(8, 3)),

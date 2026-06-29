@@ -1,127 +1,38 @@
 # =============================================================================
-# Ulomki
-# =====================================================================@001731=
+# Vse se začne z ena
+# =====================================================================@001928=
 # 1. podnaloga
-# Izven razreda sestavite funkcijo `gcd(m, n)`, ki izračuna največji skupni
-# delitelj števil `m` in `n`. Zgled:
+# Vedno se vse začne z `"1"`. Pa se vprašajmo, kaj vidimo v tem nizu. Eno
+# enko seveda, torej `"11"`. Kaj pa vidimo v tem nizu? Dve enki, torej `"21"`.
+# Kaj pa v tem zadnjem nizu? Eno dvojko in eno enko, torej `"1211"`. Pa zdaj?
+# Eno eno, eno dvojko in dve enki, torej `"111221"`. Pa zdaj?
 # 
-#     >>> gcd(35, 63)
-#     7
+# Temu zaporedju pravimo "poglej in povej zaporedje" z začetnim členom 1.
+# 
+# Sestavite (neskončen) generator `poglej_in_povej()`, ki bo generiral
+# zgoraj opisano zaporedje. Generator naj vrača nize (in ne števila).
+# 
+#     >>> g = poglej_in_povej()
+#     >>> [next(g) for i in range(5)]
+#     ['1', '11', '21', '1211', '111221']
 # =============================================================================
-def gcd(m, n):
-    m,n= abs(m),abs(n)
-    if n > m:
-        m, n = n, m
-    delitelji_m_in_n = []
-    for i in range(m+1):
-        if i == 0:
-            i= i+1
-        if m%i == 0 and n%i == 0 :
-            delitelji_m_in_n.append(i)
-    return max(delitelji_m_in_n)
-# =====================================================================@001732=
+
+# =====================================================================@001929=
 # 2. podnaloga
-# Definirajte razred `Ulomek`, s katerim predstavimo ulomek. Števec in
-# imenovalec sta celi števili, pri čemer je morebiten negativen predznak
-# vedno v števcu. Ulomki naj bodo vedno okrajšani. Atributa naj se
-# imenujeta `st` in `im`.
+# Oglejmo si zaporedje
 # 
-# Najprej definirajte konstruktor `__init__(self, st, im)`. Zgled:
+#     1 2 1 3 1 2 1 4 1 2 1 3 1 2 1 5 1 2 1 3 1 2 1 4 1 2 1 3 …
 # 
-#     >>> u = Ulomek(5, 20)
-#     >>> u.st
-#     1
-#     >>> u.im
-#     4
-# =============================================================================
-class Ulomek:
-    def __init__(self, st, im):
-        if im < 0:
-            st, im = -st, -im
-        self.im = im//gcd(st,im)
-        self.st = st//gcd(st, im)
-# =====================================================================@001733=
-# 3. podnaloga
-# Definirajte metodo  `__str__`, ki predstavi ulomek z nizom
-# oblike `'st/im'`. Zgled:
+# Kako smo ga dobili? Začnemo z 1. Sledi 2, potem pa še enkrat ponovimo vse,
+# kar je bilo pred 2. Sledi 3, nato pa še enkrat ponovimo vse, kar smo imeli
+# pred 3…
 # 
-#     >>> u = Ulomek(5, 20)
-#     >>> print(u)
-#     1/4
-# =============================================================================
-    def __str__(self):
-        return f'{self.st}/{self.im}'
-# =====================================================================@001734=
-# 4. podnaloga
-# Definirajte še metodo  `__repr__`, ki predstavi ulomek z nizom
-# oblike `'Ulomek(st, im)'`. Zgled:
+# Sestavite (neskončen) generator `ravnilo()`, ki bo generiral člene zgoraj
+# opisanega zaporedja.
 # 
-#     >>> u = Ulomek(5, 20)
-#     >>> u
-#     Ulomek(1, 4)
-# =============================================================================
-
-# =====================================================================@001735=
-# 5. podnaloga
-# Definirajte metodo  `__eq__(self, other)`, ki vrne `True` če sta dva
-# ulomka enaka, in `False` sicer. Zgled:
-# 
-#     >>> Ulomek(1, 3) == Ulomek(2, 3)
-#     False
-#     >>> Ulomek(2, 3) == Ulomek(10, 15)
-#     True
-# =============================================================================
-
-# =====================================================================@001736=
-# 6. podnaloga
-# Definirajte metodo  `__add__(self, other)`, ki vrne vsoto dveh ulomkov.
-# Ko definirate to metodo, lahko ulomke seštevate kar z operatorjem `+`.
-# Na primer:
-# 
-#     >>> Ulomek(1, 6) + Ulomek(1, 4)
-#     Ulomek(5, 12)
-# =============================================================================
-
-# =====================================================================@001737=
-# 7. podnaloga
-# Definirajte metodo  `__sub__`, ki vrne razliko dveh ulomkov.
-# Ko definirate to metodo, lahko ulomke odštevate kar z operatorjem `-`.
-# Na primer:
-# 
-#     >>> Ulomek(1, 4) - Ulomek(1, 6)
-#     Ulomek(1, 12)
-# =============================================================================
-
-# =====================================================================@001738=
-# 8. podnaloga
-# Definirajte metodo  `__mul__`, ki vrne zmnožek dveh ulomkov.
-# Ko definirate to metodo, lahko ulomke množite kar z operatorjem `*`.
-# Na primer:
-# 
-#     >>> Ulomek(1, 3) * Ulomek(1, 2)
-#     Ulomek(1, 6)
-# =============================================================================
-
-# =====================================================================@001739=
-# 9. podnaloga
-# Definirajte metodo  `__truediv__`, ki vrne kvocient dveh
-# ulomkov. Ko definirate to metodo, lahko ulomke delite kar z operatorjem
-# `/`. Na primer:
-# 
-#     >>> Ulomek(1, 6) / Ulomek(1, 4)
-#     Ulomek(2, 3)
-# =============================================================================
-
-# =====================================================================@001740=
-# 10. podnaloga
-# Izven razreda `Ulomek` definirajte funkcijo `priblizek(n)`, ki vrne
-# vsoto $$\frac{1}{0!} + \frac{1}{1!} + \frac{1}{2!} + … + \frac{1}{n!}.$$
-# Funkcija naj uporablja razred `Ulomek`. Zgled:
-# 
-#     >>> priblizek(5)
-#     Ulomek(163, 60)
-# 
-# Ali je izračunana vrednost blizu števila $e$?
+#     >>> g = ravnilo()
+#     >>> [next(g) for x in range(20)]
+#     [1, 2, 1, 3, 1, 2, 1, 4, 1, 2, 1, 3, 1, 2, 1, 5, 1, 2, 1, 3]
 # =============================================================================
 
 
@@ -741,18 +652,11 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoxNzMxLCJ1c2VyIjoxMTUzOH0:1wcR91:w2LAAJRABt_pL-e0Cku2Eezziu0lngtHBywo1OcVwHY"
+        ] = "eyJwYXJ0IjoxOTI4LCJ1c2VyIjoxMTUzOH0:1wEplP:ZQ7P-zxK82D0pPmBC7NOmARzBQKCSuE_RQDFzq8L8z0"
         try:
-            test_data = [
-                ('gcd(63, 35)', 7),
-                ('gcd(40, 35)', 5),
-                ('gcd(40, 19)', 1),
-                ('gcd(15, 69)', 3),
-                ('gcd(12345, 6789)', 3),
-            ]
-            for td in test_data:
-                if not Check.equal(*td):
-                    break
+            Check.generator("poglej_in_povej()", ['1', '11', '21', '1211', '111221', '312211', '13112221', '1113213211', '31131211131221', '13211311123113112211',
+                                                  '11131221133112132113212221', '3113112221232112111312211312113211', '1321132132111213122112311311222113111221131221',
+                                                  '11131221131211131231121113112221121321132132211331222113112211', '311311222113111231131112132112311321322112111312211312111322212311322113212221'], further_iter=20)
         except TimeoutError:
             Check.error("Dovoljen čas izvajanja presežen")
         except Exception:
@@ -764,260 +668,11 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoxNzMyLCJ1c2VyIjoxMTUzOH0:1wcR91:4XjkVgkfMgq4L0m9ho9-63cR0gWyJxNojkBdk4Kztv4"
+        ] = "eyJwYXJ0IjoxOTI5LCJ1c2VyIjoxMTUzOH0:1wEplP:N-UxiM_CEXSFN9wU_YLYZcD6Mrsl1TS55G3_6R5bhrc"
         try:
-            test_data = [
-                ('Ulomek(5, 1).st', 5),
-                ('Ulomek(5, 1).im', 1),
-                ('Ulomek(5, 20).st', 1),
-                ('Ulomek(5, 20).im', 4),
-                ('Ulomek(20, 6).st', 10),
-                ('Ulomek(20, 6).im', 3),
-                ('Ulomek(5, 7).st', 5),
-                ('Ulomek(5, 7).im', 7),
-                ('Ulomek(7, 5).st', 7),
-                ('Ulomek(7, 5).im', 5),
-                ('Ulomek(-7, 5).st', -7),
-                ('Ulomek(-7, 5).im', 5),
-                ('Ulomek(-7, -5).st', 7),
-                ('Ulomek(-7, -5).im', 5),
-                ('Ulomek(0, 7).st', 0),
-                ('Ulomek(0, 7).im', 1),
-                ('Ulomek(40, -60).im', 3),
-                ('Ulomek(40, -60).st', -2),
-            ]
-            for td in test_data:
-                if not Check.equal(*td):
-                    break
-        except TimeoutError:
-            Check.error("Dovoljen čas izvajanja presežen")
-        except Exception:
-            Check.error(
-                "Testi sprožijo izjemo\n  {0}",
-                "\n  ".join(traceback.format_exc().split("\n"))[:-2],
-            )
-
-    if Check.part():
-        Check.current_part[
-            "token"
-        ] = "eyJwYXJ0IjoxNzMzLCJ1c2VyIjoxMTUzOH0:1wcR91:Hf2hGiGRzarQ9rQexb_okasX9JhEcriznHJ6MHYxGZs"
-        try:
-            test_data = [
-                ('str(Ulomek(20, 6))', '10/3'),
-                ('str(Ulomek(0, 113))', '0/1'),
-                ('str(Ulomek(40, -60))', '-2/3'),
-                ('str(Ulomek(5, 20))', '1/4'),
-                ('str(Ulomek(5, 7))', '5/7'),
-                ('str(Ulomek(7, 5))', '7/5'),
-                ('str(Ulomek(-7, 5))', '-7/5'),
-                ('str(Ulomek(7, -5))', '-7/5'),
-                ('str(Ulomek(-7, -5))', '7/5'),
-            ]
-            for td in test_data:
-                if not Check.equal(*td):
-                    break
-        except TimeoutError:
-            Check.error("Dovoljen čas izvajanja presežen")
-        except Exception:
-            Check.error(
-                "Testi sprožijo izjemo\n  {0}",
-                "\n  ".join(traceback.format_exc().split("\n"))[:-2],
-            )
-
-    if Check.part():
-        Check.current_part[
-            "token"
-        ] = "eyJwYXJ0IjoxNzM0LCJ1c2VyIjoxMTUzOH0:1wcR91:Kx_XMfkPMO-UCtKsGwAUX41bH9byvONF92kLt_axJf0"
-        try:
-            test_data = [
-                ('repr(Ulomek(20, 6))', 'Ulomek(10, 3)'),
-                ('repr(Ulomek(0, 226))', 'Ulomek(0, 1)'),
-                ('repr(Ulomek(40, -60))', 'Ulomek(-2, 3)'),
-                ('repr(Ulomek(5, 20))', 'Ulomek(1, 4)'),
-                ('repr(Ulomek(5, 7))', 'Ulomek(5, 7)'),
-                ('repr(Ulomek(7, 5))', 'Ulomek(7, 5)'),
-                ('repr(Ulomek(-7, 5))', 'Ulomek(-7, 5)'),
-                ('repr(Ulomek(7, -5))', 'Ulomek(-7, 5)'),
-                ('repr(Ulomek(-7, -5))', 'Ulomek(7, 5)'),
-            ]
-            for td in test_data:
-                if not Check.equal(*td):
-                    break
-        except TimeoutError:
-            Check.error("Dovoljen čas izvajanja presežen")
-        except Exception:
-            Check.error(
-                "Testi sprožijo izjemo\n  {0}",
-                "\n  ".join(traceback.format_exc().split("\n"))[:-2],
-            )
-
-    if Check.part():
-        Check.current_part[
-            "token"
-        ] = "eyJwYXJ0IjoxNzM1LCJ1c2VyIjoxMTUzOH0:1wcR91:_9lnZQmmFF4meUenzLifxwzGlm1GpvfiReQcCtyK0Ec"
-        try:
-            test_data = [
-                ('Ulomek(1, 3) == Ulomek(2, 3)', False),
-                ('Ulomek(2, 3) == Ulomek(10, 15)', True),
-                ('Ulomek(0, 3) == Ulomek(0, 2215)', True),
-                ('Ulomek(20, 6) == Ulomek(10, 3)', True),
-                ('Ulomek(-10, 3) == Ulomek(10, 3)', False),
-                ('Ulomek(10, -3) == Ulomek(10, 3)', False),
-                ('Ulomek(1, 4) == Ulomek(4, 1)', False),
-                ('Ulomek(20, 6) == Ulomek(10, 3)', True),
-                ('Ulomek(40, -60) == Ulomek(-2, 3)', True),
-                ('Ulomek(5, 20) == Ulomek(1, 4)', True),
-                ('Ulomek(5, 7) == Ulomek(5, 7)', True),
-                ('Ulomek(7, 5) == Ulomek(7, 5)', True),
-                ('Ulomek(-7, 5) == Ulomek(-7, 5)', True),
-                ('Ulomek(7, -5) == Ulomek(-7, 5)', True),
-                ('Ulomek(-7, -5) == Ulomek(7, 5)', True),
-                ('Ulomek(999999999, 1000000000) == Ulomek(999999998, 999999999)', False),
-            ]
-            for td in test_data:
-                if not Check.equal(*td):
-                    break
-        except TimeoutError:
-            Check.error("Dovoljen čas izvajanja presežen")
-        except Exception:
-            Check.error(
-                "Testi sprožijo izjemo\n  {0}",
-                "\n  ".join(traceback.format_exc().split("\n"))[:-2],
-            )
-
-    if Check.part():
-        Check.current_part[
-            "token"
-        ] = "eyJwYXJ0IjoxNzM2LCJ1c2VyIjoxMTUzOH0:1wcR91:JxAMK8U73X6tpPkuG3qCKWQKRmhCaivs1sIYnQxL_GI"
-        try:
-            test_data = [
-                ('Ulomek(1, 6) + Ulomek(1, 4)', Ulomek(5, 12)),
-                ('Ulomek(1, -6) + Ulomek(-1, 4)', Ulomek(-5, 12)),
-                ('Ulomek(1, 6) + Ulomek(-1, 4)', Ulomek(-1, 12)),
-                ('Ulomek(1, -6) + Ulomek(1, 4)', Ulomek(1, 12)),
-                ('Ulomek(1, 6) + Ulomek(1, 6)', Ulomek(1, 3)),
-                ('Ulomek(1, 6) + Ulomek(-1, 6)', Ulomek(0, 1)),
-                ('Ulomek(60, 1) + Ulomek(-1, 60)', Ulomek(3599, 60)),
-                ('Ulomek(1, 2014) + Ulomek(1, 2015)', Ulomek(4029, 4058210)),
-                ('Ulomek(1, 2014) + Ulomek(1, -2015)', Ulomek(1, 4058210)),
-                ('Ulomek(757, 3000) + Ulomek(743, 3000)', Ulomek(1, 2)),
-                ('Ulomek(1009, 2022) + Ulomek(1013, 2022)', Ulomek(1, 1)),
-            ]
-            for td in test_data:
-                if not Check.equal(*td):
-                    break
-        except TimeoutError:
-            Check.error("Dovoljen čas izvajanja presežen")
-        except Exception:
-            Check.error(
-                "Testi sprožijo izjemo\n  {0}",
-                "\n  ".join(traceback.format_exc().split("\n"))[:-2],
-            )
-
-    if Check.part():
-        Check.current_part[
-            "token"
-        ] = "eyJwYXJ0IjoxNzM3LCJ1c2VyIjoxMTUzOH0:1wcR91:maRJfhDC6TfTJpGI6pq6A-PRUSZRLeBCP7FmoQfmIpM"
-        try:
-            test_data = [
-                ('Ulomek(1, 6) - Ulomek(1, 4)', Ulomek(-1, 12)),
-                ('Ulomek(1, 4) - Ulomek(1, 6)', Ulomek(1, 12)),
-                ('Ulomek(3, 6) - Ulomek(1, 6)', Ulomek(1, 3)),
-                ('Ulomek(1, -6) - Ulomek(-1, 4)', Ulomek(1, 12)),
-                ('Ulomek(1, 6) - Ulomek(-1, 4)', Ulomek(5, 12)),
-                ('Ulomek(1, -6) - Ulomek(1, 4)', Ulomek(-5, 12)),
-                ('Ulomek(1, 6) - Ulomek(1, 6)', Ulomek(0, 1)),
-                ('Ulomek(1, 6) - Ulomek(-1, 6)', Ulomek(1, 3)),
-                ('Ulomek(60, 1) - Ulomek(-1, 60)', Ulomek(3601, 60)),
-                ('Ulomek(1, 2014) - Ulomek(1, 2015)', Ulomek(1, 4058210)),
-                ('Ulomek(1, 2014) - Ulomek(1, -2015)', Ulomek(4029, 4058210)),
-                ('Ulomek(757, 3000) - Ulomek(743, 3000)', Ulomek(7, 1500)),
-                ('Ulomek(2003, 1980) - Ulomek(1013, 1980)', Ulomek(1, 2)),
-            ]
-            for td in test_data:
-                if not Check.equal(*td):
-                    break
-        except TimeoutError:
-            Check.error("Dovoljen čas izvajanja presežen")
-        except Exception:
-            Check.error(
-                "Testi sprožijo izjemo\n  {0}",
-                "\n  ".join(traceback.format_exc().split("\n"))[:-2],
-            )
-
-    if Check.part():
-        Check.current_part[
-            "token"
-        ] = "eyJwYXJ0IjoxNzM4LCJ1c2VyIjoxMTUzOH0:1wcR91:2mK2bnYmCkVTehOdq3kOT9UmU2GflyTtu8iD3q04fGI"
-        try:
-            test_data = [
-                ('Ulomek(1, 3) * Ulomek(1, 2)', Ulomek(1, 6)),
-                ('Ulomek(1, 6) * Ulomek(1, 4)', Ulomek(1, 24)),
-                ('Ulomek(4, 9) * Ulomek(3, 2)', Ulomek(2, 3)),
-                ('Ulomek(1, -6) * Ulomek(-1, 4)', Ulomek(1, 24)),
-                ('Ulomek(1, 6) * Ulomek(-1, 4)', Ulomek(-1, 24)),
-                ('Ulomek(1, -6) * Ulomek(1, 4)', Ulomek(-1, 24)),
-                ('Ulomek(757, 3000) * Ulomek(743, 3000)', Ulomek(562451, 9000000)),
-                ('Ulomek(60, 1) * Ulomek(-1, 60)', Ulomek(-1, 1)),
-                ('Ulomek(25857, 160930) * Ulomek(277970, 33813)', Ulomek(247, 187)),
-                ('Ulomek(25857, 1) * Ulomek(277970, 1)', Ulomek(7187470290, 1)),
-            ]
-            for td in test_data:
-                if not Check.equal(*td):
-                    break
-        except TimeoutError:
-            Check.error("Dovoljen čas izvajanja presežen")
-        except Exception:
-            Check.error(
-                "Testi sprožijo izjemo\n  {0}",
-                "\n  ".join(traceback.format_exc().split("\n"))[:-2],
-            )
-
-    if Check.part():
-        Check.current_part[
-            "token"
-        ] = "eyJwYXJ0IjoxNzM5LCJ1c2VyIjoxMTUzOH0:1wcR91:VIdpQyLJcwyEYotXIRhMtLu_EOncHNvOSFiSfdIXve8"
-        try:
-            test_data = [
-                ('Ulomek(1, 6) / Ulomek(1, 4)', Ulomek(2, 3)),
-                ('Ulomek(4, 9) / Ulomek(2, 3)', Ulomek(2, 3)),
-                ('Ulomek(1, -6) / Ulomek(-1, 4)', Ulomek(2, 3)),
-                ('Ulomek(1, 6) / Ulomek(-1, 4)', Ulomek(-2, 3)),
-                ('Ulomek(1, -6) / Ulomek(1, 4)', Ulomek(-2, 3)),
-                ('Ulomek(757, 3000) / Ulomek(743, 3000)', Ulomek(757, 743)),
-                ('Ulomek(757, 3000) / Ulomek(3000, 743)', Ulomek(562451, 9000000)),
-                ('Ulomek(60, 1) / Ulomek(-60, 1)', Ulomek(-1, 1)),
-                ('Ulomek(160930, 25857) / Ulomek(277970, 33813)', Ulomek(187, 247)),
-                ('Ulomek(25857, 1) / Ulomek(277970, 1)', Ulomek(25857, 277970)),
-                ('Ulomek(25857, 1) / Ulomek(1, 277970)', Ulomek(7187470290, 1)),
-            ]
-            for td in test_data:
-                if not Check.equal(*td):
-                    break
-        except TimeoutError:
-            Check.error("Dovoljen čas izvajanja presežen")
-        except Exception:
-            Check.error(
-                "Testi sprožijo izjemo\n  {0}",
-                "\n  ".join(traceback.format_exc().split("\n"))[:-2],
-            )
-
-    if Check.part():
-        Check.current_part[
-            "token"
-        ] = "eyJwYXJ0IjoxNzQwLCJ1c2VyIjoxMTUzOH0:1wcR91:xWWRcyXKyXZORjDAOg0Wspw4P0HyJ0W2A6bo3fzcji4"
-        try:
-            test_data = [
-                ('priblizek(3)', Ulomek(8, 3)),
-                ('priblizek(1)', Ulomek(2, 1)),
-                ('priblizek(0)', Ulomek(1, 1)),
-                ('priblizek(5)', Ulomek(163, 60)),
-                ('priblizek(10)', Ulomek(9864101, 3628800)),
-                ('priblizek(20)', Ulomek(6613313319248080001, 2432902008176640000)),
-            ]
-            for td in test_data:
-                if not Check.equal(*td):
-                    break
+            Check.generator("ravnilo()", [1, 2, 1, 3, 1, 2, 1, 4, 1, 2, 1, 3, 1, 2, 1, 5, 1, 2, 1, 3, 1, 2, 1, 4, 1, 2, 1, 3, 1, 2, 1, 6, 1, 2, 1, 3, 1, 2, 1, 4, 1, 2, 1,
+                                          3, 1, 2, 1, 5, 1, 2, 1, 3, 1, 2, 1, 4, 1, 2, 1, 3, 1, 2, 1, 7, 1, 2, 1, 3, 1, 2, 1, 4, 1, 2, 1, 3, 1, 2, 1, 5, 1, 2, 1, 3, 1, 2,
+                                          1, 4, 1, 2, 1, 3, 1, 2, 1, 6, 1, 2, 1, 3], further_iter=1000)
         except TimeoutError:
             Check.error("Dovoljen čas izvajanja presežen")
         except Exception:
